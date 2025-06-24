@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "e-procurement-client-side-solution",
+    "id": "21cbf2d2-75b1-467e-baa1-a4da8285f20f",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.21.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "e-procurement description"
+      },
+      "longDescription": {
+        "default": "e-procurement description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "e-procurement Feature",
+        "description": "The feature that activates elements of the e-procurement solution.",
+        "id": "bb46a660-d48f-4750-87b1-069546eb5663",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/e-procurement.sppkg"
+  }
+}

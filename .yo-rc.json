@@ -1,0 +1,18 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.16.0",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "e-procurement",
+    "libraryId": "21cbf2d2-75b1-467e-baa1-a4da8285f20f",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "e-procurement",
+    "solutionShortDescription": "e-procurement description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

@@ -34,7 +34,7 @@ const ContractManagement:React.FC<IContractManagement> = ({sampleRequests}) =>{
           {/* Recent Requests Table */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Tender Requests</h3>
+              <h3 className="text-lg font-semibold">Contract Requests</h3>
               <div className="flex gap-2">
                 <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewContract}>
                   <Plus className="w-4 h-4" />

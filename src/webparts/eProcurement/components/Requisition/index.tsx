@@ -160,6 +160,11 @@ const Requistion:React.FC<IRequistion> = ({sampleRequests}) =>{
               Reference Number: <strong>{referenceNumber}</strong><br />
               <br />
               Once Executive Chairman (EC) approves, the memo is forwarded to the Director of Procurement for action
+              <br />
+              •	The Director of Procurement:
+          	    Reviews the memo,
+       	        Validates the request against the approved annual procurement plan
+
   
           </MessageBar>
   

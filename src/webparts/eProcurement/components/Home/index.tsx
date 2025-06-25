@@ -54,8 +54,9 @@ const FIRSProcurementSystem = () => {
     const sidenavItems = [
       { id: 'dashboard', name: 'Dashboard', icon: Home, active: true },
       { id: 'annual', name: 'Annual Planning', icon: Milestone },
-      { id: 'requests', name: 'All Requests', icon: FileText },
-      { id: 'new-request', name: 'New Request', icon: Plus },
+      { id: 'dept', name: 'Departmental Needs', icon: Milestone },
+      { id: 'new-requisition', name: 'New Requistion Request', icon: Plus },
+      { id: 'requisition', name: 'All Requistion Requests', icon: FileText },
       { id: 'approvals', name: 'Approvals', icon: CheckCircle },
       { id: 'tenders', name: 'Tender Management', icon: ShoppingCart },
       { id: 'contracts', name: 'Contract Management', icon: ClipboardList },
@@ -75,13 +76,13 @@ const FIRSProcurementSystem = () => {
         { id: 'workflow', name: 'Process Workflow' },
         { id: 'analytics', name: 'Analytics' }
       ],
-      requests: [
+      requisition: [
         { id: 'all', name: 'All Requests' },
         { id: 'active', name: 'Active' },
         { id: 'completed', name: 'Completed' },
         { id: 'draft', name: 'Drafts' }
       ],
-      'new-request': [
+      'new-requisition': [
         { id: 'goods', name: 'Goods' },
         { id: 'works', name: 'Works' },
         { id: 'services', name: 'Services' }
@@ -97,7 +98,7 @@ const FIRSProcurementSystem = () => {
       switch(activeTab) {
         case 'dashboard':
           return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
-        case 'new-request':
+        case 'new-requisition':
           //return <NewRequestForm />;
         case 'approvals':
           //return <Approvals sampleRequests={sampleRequests} />;

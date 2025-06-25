@@ -5,11 +5,12 @@ import styles from '../components/EProcurement.module.scss';
 interface IMsgBox {
   isOpen: boolean;
   message?: string;
+  action: string;
   onDismiss?: () => void;
   referenceNumber: string;
 }
 
-const MsgBox: React.FC<IMsgBox> = ({ isOpen, onDismiss, referenceNumber, message }) => {
+const MsgBox: React.FC<IMsgBox> = ({ isOpen, onDismiss, referenceNumber, message, action }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -24,7 +25,7 @@ const MsgBox: React.FC<IMsgBox> = ({ isOpen, onDismiss, referenceNumber, message
             styles={{ root: { marginBottom: '16px' } }}
             isMultiline={true}
           >
-            <strong>Submitted Successfully!</strong>
+            <strong>{action}!</strong>
             <br />
             <br />
             Reference Number: <strong>{referenceNumber}</strong>

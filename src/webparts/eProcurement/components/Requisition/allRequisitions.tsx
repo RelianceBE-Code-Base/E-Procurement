@@ -1,5 +1,8 @@
-import { Download, Eye, Filter, Plus } from 'lucide-react';
+import { Eye, Filter, Plus } from 'lucide-react';
 import * as React from 'react';
+import MsgBox from '../../Modals/msgBox';
+import { useState } from 'react';
+import NewAnnualPlan from '../AnnualPlan/newAnnualPlan';
 
 interface IAllRequisitions{
     stages?: any;
@@ -7,18 +10,31 @@ interface IAllRequisitions{
     sampleRequests: any
 }
 const AllRequisitions:React.FC<IAllRequisitions> = ({sampleRequests}) =>{
+  const [showNewNewRequisition, setShowNewNewRequisition] = useState(false)
+  const [showCompletionBox, setShowCompletionBox] = useState(false)
+  const [referenceNumber, setReferenceNumber] = useState<string>("");
+  const [message, setMessage] = useState<string>(``);
 
-    const openNewAnnualPlan = () => {
-        throw new Error('Function not implemented.');
-    }
+  const openNewNewRequisition = () => {
+      setShowNewNewRequisition(true)
+  }
+
+  const openCompletionBox =(item:any)=>{
+      setMessage(`This requisition request has been successfully validated agaist the annual procurement plan.
+      
+      Tendering Process Initiation can now proceed`)
+      setShowCompletionBox(true)
+      setReferenceNumber(item)
+  }
+
 
     return(
         <>
         <div className="bg-white rounded-lg shadow p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Recent Procurement Requests</h3>
+                  <h3 className="text-lg font-semibold">Requisition Requests</h3>
                   <div className="flex gap-2">
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewAnnualPlan}>
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewNewRequisition}>
                       <Plus className="w-4 h-4" />
                       New Request
                     </button>
@@ -71,8 +87,8 @@ const AllRequisitions:React.FC<IAllRequisitions> = ({sampleRequests}) =>{
                               <button className="p-1 text-blue-600 hover:bg-blue-100 rounded">
                                 <Eye className="w-4 h-4" />
                               </button>
-                              <button className="p-1 text-gray-600 hover:bg-gray-100 rounded">
-                                <Download className="w-4 h-4" />
+                              <button className="p-1 px-2 py-2 border border-gray-300 hover:bg-blue-100 rounded" onClick={ () => openCompletionBox(request.id)}>
+                               Validates Request
                               </button>
                             </div>
                           </td>
@@ -82,6 +98,14 @@ const AllRequisitions:React.FC<IAllRequisitions> = ({sampleRequests}) =>{
                   </table>
                 </div>
               </div>
+
+              {showNewNewRequisition && <NewAnnualPlan isOpen={showNewNewRequisition} onDismiss={() => setShowNewNewRequisition(false)}/>}
+
+              <MsgBox
+          isOpen={showCompletionBox}
+          onDismiss={() => setShowCompletionBox(false)}
+          referenceNumber={referenceNumber}
+          message={message} action={'Request Validated'}        />
         </>
     )
 }

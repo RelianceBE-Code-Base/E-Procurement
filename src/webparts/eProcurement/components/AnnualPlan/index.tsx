@@ -170,11 +170,10 @@ const AnnualPlan:React.FC<IAnnualPlan> = ({activeTab, sampleRequests}) =>{
 
           {showNewAnnualPlan && <NewAnnualPlan isOpen={showNewAnnualPlan} onDismiss={() => setShowNewAnnualPlan(false)}/>}
           <MsgBox
-            isOpen={showCompletionBox}
-            onDismiss={ () => setShowCompletionBox(false)}
-            referenceNumber={referenceNumber}
-            message={message}
-        />
+                isOpen={showCompletionBox}
+                onDismiss={() => setShowCompletionBox(false)}
+                referenceNumber={referenceNumber}
+                message={message} action={'Annual Procuremeent Plan Finalized'}        />
         </main>
     )
 }

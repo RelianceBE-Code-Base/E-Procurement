@@ -9,8 +9,11 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'EProcurementWebPartStrings';
-import EProcurement from './components/EProcurement';
+//import EProcurement from './components/EProcurement';
 import { IEProcurementProps } from './components/IEProcurementProps';
+//import App from './components/App'
+//import '../../index.css'
+import EProcurement from './components/EProcurement';
 
 export interface IEProcurementWebPartProps {
   description: string;
@@ -37,6 +40,19 @@ export default class EProcurementWebPart extends BaseClientSideWebPart<IEProcure
   }
 
   protected onInit(): Promise<void> {
+
+    // Ensure Default Chrome Is Disabled
+    this._ensureDefaultChromeIsDisabled();
+
+    // Add Tailwind CSS if not already added
+    if (!document.querySelector('#tailwind-css')) {
+      const link = document.createElement('link');
+      link.id = 'tailwind-css';
+      link.rel = 'stylesheet';
+      link.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+      document.head.appendChild(link);
+    }
+
     return this._getEnvironmentMessage().then(message => {
       this._environmentMessage = message;
     });
@@ -69,6 +85,41 @@ export default class EProcurementWebPart extends BaseClientSideWebPart<IEProcure
     }
 
     return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
+  }
+
+  private _ensureDefaultChromeIsDisabled(): void {
+    const elements = ['#workbenchPageContent', '#SuiteNavWrapper', '.SPCanvas-canvas', '.CanvasZone', '.ms-CommandBar', '#spSiteHeader', '.commandBarWrapper'];
+    elements.forEach(selector => {
+      document.querySelectorAll(selector).forEach(element => {
+        (element as HTMLElement).style.display = 'none !important';
+        (element as HTMLElement).style.maxWidth = 'none';
+      });
+    });
+
+    // Check if the device is mobile and apply mobile-specific styles
+    if (this._isMobileDevice()) {
+      const mobileElements = [
+        '.spMobileHeader',
+        '.ms-FocusZone',
+        '.ms-CommandBar',
+        '.spMobileNav',
+        '#O365_MainLink_NavContainer', // Waffle (App Launcher)
+        '.ms-Nav', // Additional possible mobile navigation elements
+        '.ms-Nav-item' // Possible item within the navigation
+      ];
+      mobileElements.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+          (element as HTMLElement).style.display = 'none';
+        });
+      });
+    }
+  }
+
+  private _isMobileDevice(): boolean {
+    // Check if the user is on a mobile device based on user agent or screen width
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /iphone|ipod|ipad|android|blackberry|windows phone/i.test(userAgent);
+    return isMobile || window.innerWidth <= 768; // Custom breakpoint for mobile
   }
 
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {

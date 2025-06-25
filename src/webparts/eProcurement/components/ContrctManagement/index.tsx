@@ -20,9 +20,7 @@ const ContractManagement:React.FC<IContractManagement> = ({sampleRequests}) =>{
     }
 
     const openCompletionBox =(item:any)=>{
-        setMessage(`This annual procurement plan has been marked completed.
-        
-        User department can now initate requisition for this procurement plan`)
+        setMessage(`An Award Letter has been issued to the winning vendor/contractor`)
         setShowCompletionBox(true)
         setReferenceNumber(item)
     }
@@ -91,7 +89,7 @@ const ContractManagement:React.FC<IContractManagement> = ({sampleRequests}) =>{
                           </button>
                           <button className="p-1 px-2 py-2 border border-gray-300 hover:bg-blue-100 rounded" onClick={ () => openCompletionBox(request.id)}>
                             {/* <Download className="w-4 h-4" /> */}
-                            Finalize Plan
+                            Award Letter
                           </button>
                         </div>
                       </td>
@@ -108,7 +106,7 @@ const ContractManagement:React.FC<IContractManagement> = ({sampleRequests}) =>{
           isOpen={showCompletionBox}
           onDismiss={() => setShowCompletionBox(false)}
           referenceNumber={referenceNumber}
-          message={message} action={'Contract Initiated'}    />
+          message={message} action={'Contract Awarded'}    />
     </main>
     )
 }

@@ -31,6 +31,22 @@ $colors: (
   height: 100vh;
 }
 
+/* ========== Base Modal Styles ========== */
+$modal-max-width: 700px;
+$container-max-width: 800px;
+$border-radius: 4px;
+$box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.132), 0 0.3px 0.9px rgba(0, 0, 0, 0.108);
+
+.no-before::before {
+  display: none !important;
+  content: none !important;
+}
+
+.no-after::after {
+  display: none !important;
+  content: none !important;
+}
+
 /* ========== Layout Styles ========== */
 .layout {
   &Container {
@@ -402,5 +418,26 @@ $colors: (
     &:hover {
       color: map-get($colors, primary-light);
     }
+  }
+}
+
+
+/* ========== Modal Styles ========== */
+.modal {
+  &Container {
+    width: 100%;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: map-get($colors, bg-white);
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+  }
+
+  &Content {
+    width: $modal-max-width;
+    padding: 20px;
+    background-color: map-get($colors, bg-white);
+    border-radius: $border-radius;
   }
 }

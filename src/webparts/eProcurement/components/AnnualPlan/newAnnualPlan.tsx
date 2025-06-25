@@ -17,9 +17,9 @@ import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 // import {
 //   Icon
 // } from '@fluentui/react/lib/Icon';
-import { mergeStyles } from '@fluentui/react/lib/Styling';
+//import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { initializeIcons, Modal, Stack } from '@fluentui/react';
-
+import styles from '../EProcurement.module.scss';
 // Initialize Fluent UI icons
 initializeIcons();
 
@@ -28,23 +28,7 @@ interface NewAnnualPlanProps {
     onSubmit?: (data: any) => void;
     onDismiss?: () => void;
 }
-  
-  const containerStyle = mergeStyles({
-    width: '100%',
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
-    backgroundColor: '#ffffff',
-    boxShadow: '0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108)',
-    borderRadius: '4px',
-  });
 
-  const modalContentStyles = mergeStyles({
-    width: '700px',
-    padding: '20px',
-    backgroundColor: '#ffffff',
-    borderRadius: '4px',
-  });
 
 const NewAnnualPlan = ({
     isOpen,
@@ -109,9 +93,9 @@ const NewAnnualPlan = ({
       onDismiss();
     }}
     isBlocking={false}
-    containerClassName={modalContentStyles}
+    containerClassName={styles.modalContent}
   >
-    <div className={containerStyle}>
+    <div className={styles.modalContainer}>
     <Stack tokens={{ childrenGap: 16 }}>
     {!successful && <div>
       <Stack>

@@ -1,13 +1,18 @@
 import * as React from 'react';
 import { useState } from 'react';
-import styles from '../EProcurement.module.scss';
-import { FileText, CheckCircle, Plus, Home, BarChart3, ShoppingCart, ClipboardList, DollarSign, Archive } from 'lucide-react';
+//import styles from '../EProcurement.module.scss';
+import { FileText, CheckCircle, Plus, Home, BarChart3, ShoppingCart, ClipboardList, DollarSign, Archive,Milestone, Building } from 'lucide-react';
 import SideNav from '../SideNavigation';
 import TopNavigation from '../TopNavigation';
 import SubNavigation from '../SubNavigation';
 import AnnualPlan from '../AnnualPlan'
 import Footer from '../Footer'
 import Dashboard from '../Dashboard';
+import Requisition from '../Requisition';
+import Approvals from '../Approvals'
+import TenderManagement from '../TenderManagement';
+import ContractManagement from '../ContrctManagement';
+import AllRequisitions from '../Requisition/allRequisitions';
 
 
 const FIRSProcurementSystem = () => {
@@ -51,9 +56,9 @@ const FIRSProcurementSystem = () => {
     const sidenavItems = [
       { id: 'dashboard', name: 'Dashboard', icon: Home, active: true },
       { id: 'annual', name: 'Annual Planning', icon: Milestone },
-      { id: 'dept', name: 'Departmental Needs', icon: Milestone },
+      { id: 'dept', name: 'Departmental Needs', icon: Building },
       { id: 'new-requisition', name: 'New Requistion Request', icon: Plus },
-      { id: 'requisition', name: 'All Requistion Requests', icon: FileText },
+      { id: 'requisitions', name: 'All Requistion Requests', icon: FileText },
       { id: 'approvals', name: 'Approvals', icon: CheckCircle },
       { id: 'tenders', name: 'Tender Management', icon: ShoppingCart },
       { id: 'contracts', name: 'Contract Management', icon: ClipboardList },
@@ -91,20 +96,26 @@ const FIRSProcurementSystem = () => {
       ]
     };
   
-    const renderMainContent = () => {
-      switch(activeTab) {
-        case 'dashboard':
-          return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
-        case 'new-requisition':
-          //return <NewRequestForm />;
-        case 'approvals':
-          //return <Approvals sampleRequests={sampleRequests} />;
-        case 'annual':
-          return <AnnualPlan activeTab={activeTab} sampleRequests={sampleRequests} />;
-        default:
-          return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
-      }
-    };
+  const renderMainContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
+      case 'new-requisition':
+        return <Requisition />;
+      case 'approvals':
+        return <Approvals sampleRequests={sampleRequests} />;
+      case 'annual':
+        return <AnnualPlan activeTab={activeTab} sampleRequests={sampleRequests} />;
+      case 'tenders':
+        return <TenderManagement />;
+      case 'requisitions':
+        return <AllRequisitions />;
+      case 'contract':
+        return <ContractManagement />;
+      default:
+        return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
+    }
+  };
   console.log(selectedStage)
     return (
       <div className="min-h-screen bg-gray-100 flex">

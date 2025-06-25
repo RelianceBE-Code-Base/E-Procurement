@@ -1,6 +1,6 @@
 import * as React from 'react';
 import MsgBox from '../../Modals/msgBox';
-import { Eye, Filter, Plus } from 'lucide-react';
+import { Eye, Filter, EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import NewTender from '../AnnualPlan/newAnnualPlan';
 
@@ -15,9 +15,7 @@ const TenderManagement:React.FC<ITenderManagement> = ({sampleRequests}) =>{
     const [referenceNumber, setReferenceNumber] = useState<string>("");
     const [message, setMessage] = useState<string>(``);
 
-    const openNewTender = () => {
-        setShowNewTender(true)
-    }
+
 
     const openCompletionBox =(item:any)=>{
         setMessage(`This annual procurement plan has been marked completed.
@@ -36,10 +34,6 @@ const TenderManagement:React.FC<ITenderManagement> = ({sampleRequests}) =>{
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Tender Requests</h3>
               <div className="flex gap-2">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewTender}>
-                  <Plus className="w-4 h-4" />
-                  New Request
-                </button>
                 <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
                   <Filter className="w-4 h-4" />
                   Filter
@@ -90,9 +84,15 @@ const TenderManagement:React.FC<ITenderManagement> = ({sampleRequests}) =>{
                             <Eye className="w-4 h-4" />
                           </button>
                           <button className="p-1 px-2 py-2 border border-gray-300 hover:bg-blue-100 rounded" onClick={ () => openCompletionBox(request.id)}>
-                            {/* <Download className="w-4 h-4" /> */}
-                            Finalize Plan
+                            <EllipsisVertical className="w-4 h-4" />
+                             
                           </button>
+                          {request.tenderStatus === "Assigned" &&
+                          <button className="p-1 px-2 py-2 border border-gray-300 hover:bg-blue-100 rounded" onClick={ () => openCompletionBox(request.id)}>
+                            {/* <Download className="w-4 h-4" /> */}
+                            Open Project File
+                          </button>
+}
                         </div>
                       </td>
                     </tr>
@@ -105,11 +105,10 @@ const TenderManagement:React.FC<ITenderManagement> = ({sampleRequests}) =>{
 
       {showNewTender && <NewTender isOpen={showNewTender} onDismiss={() => setShowNewTender(false)}/>}
       <MsgBox
-        isOpen={showCompletionBox}
-        onDismiss={ () => setShowCompletionBox(false)}
-        referenceNumber={referenceNumber}
-        message={message}
-    />
+          isOpen={showCompletionBox}
+          onDismiss={() => setShowCompletionBox(false)}
+          referenceNumber={referenceNumber}
+          message={message} action={'Tender Initiated'}    />
     </main>
     )
 }

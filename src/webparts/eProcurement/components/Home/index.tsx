@@ -85,9 +85,9 @@ const FIRSProcurementSystem = () => {
         { id: 'services', name: 'Services' }
       ],
       approvals: [
-        { id: 'pending', name: 'Pending Review' },
-        { id: 'approved', name: 'Approved' },
-        { id: 'rejected', name: 'Rejected' }
+        { id: 'pending', name: 'pending Review' },
+        { id: 'approved', name: 'approved' },
+        { id: 'rejected', name: 'rejected' }
       ]
     };
   

@@ -18,7 +18,7 @@ import {
 } from "@fluentui/react";
 import ProcurementItemsFluent8, { ProcurementItem } from "./AddItem";
 
-const MemoCreationFormFluent8 = ({ isOpen, onDismiss }: { isOpen: boolean; onDismiss: () => void }) => {
+const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isOpen: boolean; onDismiss: () => void, openCompletionBox: (item: any) => void }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     templateType: "",
@@ -100,6 +100,7 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss }: { isOpen: boolean; onDis
     console.log("Form Data:", formData);
     console.log("Items:", items);
     onDismiss();
+    openCompletionBox("RQ-2025-005");
   };
 
   return (

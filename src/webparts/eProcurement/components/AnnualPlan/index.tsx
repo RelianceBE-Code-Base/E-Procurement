@@ -1,8 +1,9 @@
-import {  Download, Eye, Filter, Plus } from 'lucide-react';
+import {   Eye, Filter, Plus } from 'lucide-react';
 //CheckCircle, ChevronRight, Clock, DollarSign, FileText,
 import * as React from 'react';
 import { useState } from 'react';
 import NewAnnualPlan from './newAnnualPlan';
+import MsgBox from '../../Modals/msgBox';
 
 interface IAnnualPlan{
     activeTab: any;
@@ -11,9 +12,20 @@ interface IAnnualPlan{
 const AnnualPlan:React.FC<IAnnualPlan> = ({activeTab, sampleRequests}) =>{
 
     const [showNewAnnualPlan, setShowNewAnnualPlan] = useState(false)
+    const [showCompletionBox, setShowCompletionBox] = useState(false)
+    const [referenceNumber, setReferenceNumber] = useState<string>("");
+    const [message, setMessage] = useState<string>(``);
 
     const openNewAnnualPlan = () => {
         setShowNewAnnualPlan(true)
+    }
+
+    const openCompletionBox =(item:any)=>{
+        setMessage(`This annual procurement plan has been marked completed.
+        
+        User department can now initate requisition for this procurement plan`)
+        setShowCompletionBox(true)
+        setReferenceNumber(item)
     }
 
     return(
@@ -87,7 +99,7 @@ const AnnualPlan:React.FC<IAnnualPlan> = ({activeTab, sampleRequests}) =>{
               {/* Recent Requests Table */}
               <div className="bg-white rounded-lg shadow p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Recent Procurement Requests</h3>
+                  <h3 className="text-lg font-semibold">Annaul Plan Requests</h3>
                   <div className="flex gap-2">
                     <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewAnnualPlan}>
                       <Plus className="w-4 h-4" />
@@ -142,8 +154,9 @@ const AnnualPlan:React.FC<IAnnualPlan> = ({activeTab, sampleRequests}) =>{
                               <button className="p-1 text-blue-600 hover:bg-blue-100 rounded">
                                 <Eye className="w-4 h-4" />
                               </button>
-                              <button className="p-1 text-gray-600 hover:bg-gray-100 rounded">
-                                <Download className="w-4 h-4" />
+                              <button className="p-1 px-2 py-2 border border-gray-300 hover:bg-blue-100 rounded" onClick={ () => openCompletionBox(request.id)}>
+                                {/* <Download className="w-4 h-4" /> */}
+                                Finalize Plan
                               </button>
                             </div>
                           </td>
@@ -154,88 +167,14 @@ const AnnualPlan:React.FC<IAnnualPlan> = ({activeTab, sampleRequests}) =>{
                 </div>
               </div>
             </div>
-          
-
-          {/* {activeTab === 'new-request' && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-6">New Procurement Request</h3>
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Requesting Department</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option>Select Department</option>
-                      <option>Administration</option>
-                      <option>ICT</option>
-                      <option>Finance</option>
-                      <option>Legal</option>
-                      <option>Transport</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Procurement Category</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option>Select Category</option>
-                      <option>Goods</option>
-                      <option>Works</option>
-                      <option>Services</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Request Title</label>
-                  <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter procurement request title" />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Description & Justification</label>
-                  <textarea rows={4} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Provide detailed description and justification for this procurement request"></textarea>
-                </div>
-
-                <div className="flex gap-4">
-                  <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Submit Request
-                  </button>
-                  <button className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                    Save as Draft
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'approvals' && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-6">Pending Approvals</h3>
-              <div className="space-y-4">
-                {sampleRequests.filter((r: { status: string; }) => r.status !== 'Completed').map((request:any) => (
-                  <div key={request.id} className="border rounded-lg p-4 hover:bg-gray-50">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium">{request.title}</h4>
-                        <p className="text-sm text-gray-600">{request.id} • {request.department} • {request.amount}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                          Approve
-                        </button>
-                        <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-                          Reject
-                        </button>
-                        <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
-                          Review
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )} */}
-
 
           {showNewAnnualPlan && <NewAnnualPlan isOpen={showNewAnnualPlan} onDismiss={() => setShowNewAnnualPlan(false)}/>}
+          <MsgBox
+            isOpen={showCompletionBox}
+            onDismiss={ () => setShowCompletionBox(false)}
+            referenceNumber={referenceNumber}
+            message={message}
+        />
         </main>
     )
 }

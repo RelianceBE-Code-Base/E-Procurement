@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-interface IRequistion{
+interface IAllRequisitions{
     stages?: any;
     setSelectedStage?: any;
     sampleRequests?: any
 }
-const Requistion:React.FC<IRequistion> = () =>{
+const AllRequisitions:React.FC<IAllRequisitions> = () =>{
     return(
         <>
         Hello Team!
-        This is Requistion
+        This is All Requisitions
         </>
     )
 }
-export default Requistion
+export default AllRequisitions

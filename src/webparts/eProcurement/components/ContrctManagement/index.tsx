@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-interface IRequistion{
+interface IContractManagement{
     stages?: any;
     setSelectedStage?: any;
     sampleRequests?: any
 }
-const Requistion:React.FC<IRequistion> = () =>{
+const ContractManagement:React.FC<IContractManagement> = () =>{
     return(
         <>
         Hello Team!
-        This is Requistion
+        This is Contract Management
         </>
     )
 }
-export default Requistion
+export default ContractManagement

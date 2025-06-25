@@ -1,11 +1,46 @@
+import { DefaultButton, MessageBar, MessageBarType, Modal, Stack } from '@fluentui/react';
 import * as React from 'react';
+import { useState } from 'react';
+import styles from '../EProcurement.module.scss';
 
 interface IRequistion{
     stages?: any;
     setSelectedStage?: any;
-    sampleRequests?: any
+    sampleRequests: any
 }
-const Requistion:React.FC<IRequistion> = () =>{
+const Requistion:React.FC<IRequistion> = ({sampleRequests}) =>{
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
+    const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+
+    const handleSubmit = () => {
+        setIsSubmitting(true);
+        handleReset()
+        setReferenceNumber("REQ-2025-005")
+        setIsSubmitting(false)
+        setIsSubmitted(true)
+    }
+
+    const handleDraft = () => {
+        handleReset()
+    }
+
+    const handleReset = () => {
+
+    }
+    const onDismiss = () => {
+       setIsSubmitted(false)
+    }
+    const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        if(value === "Select Annual Plan"){
+            setSelectedPlan(null)
+        }else{
+            setSelectedPlan(value)
+        }
+    }
+
     return(
         <>
         <div className="bg-white rounded-lg shadow p-6">

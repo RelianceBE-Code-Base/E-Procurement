@@ -7,7 +7,7 @@ import NewTender from '../AnnualPlan/newAnnualPlan';
 interface ITenderManagement{
     stages?: any;
     setSelectedStage?: any;
-    sampleRequests?: any
+    sampleRequests: any
 }
 const TenderManagement:React.FC<ITenderManagement> = ({sampleRequests}) =>{
     const [showNewTender, setShowNewTender] = useState(false)

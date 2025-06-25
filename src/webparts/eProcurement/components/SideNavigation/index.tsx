@@ -45,23 +45,23 @@ const SideNav:React.FC<ISideNav> = ({ sidenavOpen, setSidenavOpen, activeTab, se
           </nav>
     
           <div className="absolute bottom-4 left-4 right-4">
-            {sidenavOpen && (
-              <div className="space-y-2">
-                <button className="w-full flex items-center gap-3 px-2 py-2 text-left hover:bg-gray-800 transition-colors text-sm">
-                  <Settings className="w-4 h-4" />
-                  Settings
-                </button>
-                <button className="w-full flex items-center gap-3 px-2 py-2 text-left hover:bg-gray-800 transition-colors text-sm">
-                  <HelpCircle className="w-4 h-4" />
-                  Help
-                </button>
-                <button className="w-full flex items-center gap-3 px-2 py-2 text-left hover:bg-gray-800 transition-colors text-sm">
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+          {sidenavOpen && (
+            <div className="space-y-2">
+              <button className="w-full flex items-center gap-3 px-2 py-2 text-left hover:bg-gray-800 transition-colors text-sm">
+                <Settings className="w-4 h-4" />
+                Settings
+              </button>
+              <button className="w-full flex items-center gap-3 px-2 py-2 text-left hover:bg-gray-800 transition-colors text-sm">
+                <HelpCircle className="w-4 h-4" />
+                Help
+              </button>
+              <button className="w-full flex items-center gap-3 px-2 py-2 text-left hover:bg-gray-800 transition-colors text-sm">
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
         </div>
       );
 }

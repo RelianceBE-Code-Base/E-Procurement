@@ -1,3 +1,4 @@
+import * as React from 'react'
 // Footer Component
 const Footer = () => {
     return (
@@ -21,3 +22,5 @@ const Footer = () => {
       </footer>
     );
   };
+
+  export default Footer

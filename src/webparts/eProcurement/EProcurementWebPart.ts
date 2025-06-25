@@ -10,6 +10,7 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'EProcurementWebPartStrings';
 //import EProcurement from './components/EProcurement';
+//import EProcurement from './components/EProcurement';
 import { IEProcurementProps } from './components/IEProcurementProps';
 import App  from './components/App'
 import '../../index.css'

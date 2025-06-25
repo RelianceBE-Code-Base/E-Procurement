@@ -1,26 +1,27 @@
-import * as React from 'react'
-// Footer Component
-const Footer = () => {
-    return (
-      <footer className="bg-white border-t px-6 py-4">
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <div className="flex items-center gap-6">
-            <p>© 2025 Federal Inland Revenue Service</p>
-            <span>•</span>
-            <p>Procurement Management System v2.1</p>
-            <span>•</span>
-            <p>Last Updated: June 24, 2025</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="hover:text-blue-600">Privacy Policy</button>
-            <span>•</span>
-            <button className="hover:text-blue-600">Terms of Service</button>
-            <span>•</span>
-            <button className="hover:text-blue-600">Support</button>
-          </div>
-        </div>
-      </footer>
-    );
-  };
+import * as React from 'react';
+import styles from '../EProcurement.module.scss';
 
-  export default Footer
+const Footer: React.FC = () => {
+  return (
+    <footer className={styles.footerContainer}>
+      <div className={styles.footerContent}>
+        <div className={styles.footerLeftSection}>
+          <p>© 2025 Federal Inland Revenue Service</p>
+          <span className={styles.footerDivider}>•</span>
+          <p>Procurement Management System v2.1</p>
+          <span className={styles.footerDivider}>•</span>
+          <p>Last Updated: June 24, 2025</p>
+        </div>
+        <div className={styles.footerRightSection}>
+          <button className={styles.footerLink}>Privacy Policy</button>
+          <span className={styles.footerDivider}>•</span>
+          <button className={styles.footerLink}>Terms of Service</button>
+          <span className={styles.footerDivider}>•</span>
+          <button className={styles.footerLink}>Support</button>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

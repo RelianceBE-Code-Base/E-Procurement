@@ -1,18 +1,15 @@
 import * as React from 'react';
-import  { useState } from 'react';
-import { 
-  FileText, CheckCircle, Plus, 
-  Home, BarChart3, ShoppingCart, 
-  ClipboardList, DollarSign, Archive, Milestone } from 'lucide-react';
+import { useState } from 'react';
+import styles from '../EProcurement.module.scss';
+import { FileText, CheckCircle, Plus, Home, BarChart3, ShoppingCart, ClipboardList, DollarSign, Archive } from 'lucide-react';
 import SideNav from '../SideNavigation';
-import TopNavigation from '../TopNavigation'
+import TopNavigation from '../TopNavigation';
 import SubNavigation from '../SubNavigation';
 import AnnualPlan from '../AnnualPlan'
 import Footer from '../Footer'
 import Dashboard from '../Dashboard';
 
 
-// Main Component
 const FIRSProcurementSystem = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
     const [selectedStage, setSelectedStage] = useState(null);

@@ -105,11 +105,10 @@ const ContractManagement:React.FC<IContractManagement> = ({sampleRequests}) =>{
 
       {showNewContract && <NewContract isOpen={showNewContract} onDismiss={() => setShowNewContract(false)}/>}
       <MsgBox
-        isOpen={showCompletionBox}
-        onDismiss={ () => setShowCompletionBox(false)}
-        referenceNumber={referenceNumber}
-        message={message}
-    />
+          isOpen={showCompletionBox}
+          onDismiss={() => setShowCompletionBox(false)}
+          referenceNumber={referenceNumber}
+          message={message} action={'Contract Initiated'}    />
     </main>
     )
 }

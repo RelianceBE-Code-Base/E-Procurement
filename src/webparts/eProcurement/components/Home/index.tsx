@@ -45,11 +45,6 @@ const FIRSProcurementSystem = () => {
       { id: "REQ-2024-008", title: "Fleet Expansion", department: "Transport", status: "Completed", stage: "Final Audit", priority: "High", amount: "₦22,000,000" },
       { id: "REQ-2025-009", title: "ERP License Renewal", department: "ICT", status: "In Progress", stage: "Procurement Approval", priority: "High", amount: "₦9,000,000" },
       { id: "REQ-2025-010", title: "Medical Supplies Procurement", department: "Health", status: "Pending Approval", stage: "Internal Review", priority: "High", amount: "₦4,300,000" },
-      { id: "REQ-2025-011", title: "Workstation Chairs Purchase", department: "Admin", status: "Completed", stage: "Reconciliation", priority: "Low", amount: "₦1,100,000" },
-      { id: "REQ-2025-012", title: "Annual Staff Retreat", department: "HR", status: "Approved", stage: "Vendor Selection", priority: "Medium", amount: "₦7,800,000" },
-      { id: "REQ-2025-013", title: "Network Infrastructure Upgrade", department: "ICT", status: "In Progress", stage: "Implementation", priority: "High", amount: "₦11,200,000" },
-      { id: "REQ-2025-014", title: "Document Archiving System", department: "Records", status: "Rejected", stage: "HOD Review", priority: "Medium", amount: "₦3,400,000" },
-      { id: "REQ-2025-015", title: "CCTV Installation", department: "Security", status: "Approved", stage: "Tender Evaluation", priority: "High", amount: "₦6,000,000" }
     ];
     
   
@@ -101,7 +96,7 @@ const FIRSProcurementSystem = () => {
       case 'dashboard':
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
       case 'new-requisition':
-        return <Requisition />;
+        return <Requisition sampleRequests={sampleRequests} />;
       case 'approvals':
         return <Approvals sampleRequests={sampleRequests} />;
       case 'annual':
@@ -109,8 +104,10 @@ const FIRSProcurementSystem = () => {
       case 'tenders':
         return <TenderManagement />;
       case 'requisitions':
-        return <AllRequisitions />;
+        return <AllRequisitions sampleRequests={sampleRequests} />;
       case 'contract':
+        return <ContractManagement />;
+      case 'dept':
         return <ContractManagement />;
       default:
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;

@@ -7,7 +7,7 @@ import NewContract from '../AnnualPlan/newAnnualPlan'
 interface IContractManagement{
     stages?: any;
     setSelectedStage?: any;
-    sampleRequests?: any
+    sampleRequests: any
 }
 const ContractManagement:React.FC<IContractManagement> = ({sampleRequests}) =>{
     const [showNewContract, setShowNewContract] = useState(false)

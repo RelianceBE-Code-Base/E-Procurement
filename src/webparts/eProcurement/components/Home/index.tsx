@@ -102,13 +102,13 @@ const FIRSProcurementSystem = () => {
       case 'annual':
         return <AnnualPlan activeTab={activeTab} sampleRequests={sampleRequests} />;
       case 'tenders':
-        return <TenderManagement />;
+        return <TenderManagement sampleRequests={sampleRequests} />;
       case 'requisitions':
         return <AllRequisitions sampleRequests={sampleRequests} />;
       case 'contract':
-        return <ContractManagement />;
+        return <ContractManagement sampleRequests={sampleRequests} />;
       case 'dept':
-        return <ContractManagement />;
+        return <ContractManagement sampleRequests={sampleRequests} />;
       default:
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
     }

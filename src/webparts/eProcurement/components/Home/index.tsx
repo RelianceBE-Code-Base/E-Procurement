@@ -156,8 +156,6 @@ const FIRSProcurementSystem = () => {
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
       case 'new-requisition':
         return <Requisition sampleRequests={sampleRequests} />;
-      case 'dept':
-        return <DepartmentalNeeds />;
       case 'approvals':
         return <Approvals sampleRequests={sampleApprovalRequests} />;
       case 'annual':
@@ -167,6 +165,8 @@ const FIRSProcurementSystem = () => {
       case 'requisitions':
         return <AllRequisitions sampleRequests={sampleRequests} />;
       case 'contracts':
+        return <ContractManagement sampleRequests={sampleRequests} />;
+      case 'dept':
         return <ContractManagement sampleRequests={sampleRequests} />;
       default:
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;

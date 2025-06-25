@@ -1,34 +1,406 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
+/* ========== Color Variables ========== */
+$colors: (
+  primary: #5a5b5e,
+  primary-light: #dc2626,
+  secondary: #10b981,
+  accent: #7c3aed,
+
+  // Neutrals
+  bg-white: #ffffff,
+  bg-gray: #f3f4f6,
+  text-dark: #111827,
+  text-medium: #6b7280,
+  border: #e5e7eb,
+
+  // Status
+  success: #16a34a,
+  error: #dc2626,
+  warning: #f59e0b
+);
+
+/* ========== Base Styles ========== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 .eProcurement {
-  overflow: hidden;
-  padding: 1em;
-  color: "[theme:bodyText, default: #323130]";
-  color: var(--bodyText);
-  &.teams {
-    font-family: $ms-font-family-fallbacks;
+  height: 100vh;
+}
+
+/* ========== Layout Styles ========== */
+.layout {
+  &Container {
+    min-height: 100vh;
+    background-color: map-get($colors, bg-gray);
+    display: flex;
+  }
+
+  &MainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &ContentArea {
+    flex: 1;
+    padding: 1.5rem;
+    overflow: auto;
+    background-color: map-get($colors, bg-white);
   }
 }
 
-.welcome {
-  text-align: center;
+/* ========== Utility Classes ========== */
+.u {
+  &FullHeight {
+    height: 100%;
+  }
+
+  &FlexColumn {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
-.welcomeImage {
-  width: 100%;
-  max-width: 420px;
-}
+/* ========== Top Navigation Styles ========== */
+.topNav {
+  &Header {
+    background-color: map-get($colors, bg-white);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid map-get($colors, border);
+  }
 
-.links {
-  a {
-    text-decoration: none;
-    color: "[theme:link, default:#03787c]";
-    color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+  &Container {
+    padding: 1rem 1.5rem;
+  }
+
+  &FlexContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &Button {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
 
     &:hover {
-      text-decoration: underline;
-      color: "[theme:linkHovered, default: #014446]";
-      color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+      background-color: map-get($colors, bg-gray);
+    }
+  }
+
+  &Icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &Title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    color: map-get($colors, text-dark);
+  }
+
+  &Subtitle {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: map-get($colors, text-medium);
+  }
+
+  &Search {
+    &Container {
+      position: relative;
+    }
+
+    &Icon {
+      width: 1rem;
+      height: 1rem;
+      position: absolute;
+      left: 0.75rem;
+      top: 0.75rem;
+      color: map-get($colors, text-medium);
+    }
+
+    &Input {
+      padding-left: 2.5rem;
+      padding-right: 1rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      border: 1px solid map-get($colors, border);
+      border-radius: 0.5rem;
+      width: 16rem;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: map-get($colors, primary-light);
+      }
+    }
+  }
+
+  &Notification {
+    &Button {
+      position: relative;
+      padding: 0.5rem;
+      color: map-get($colors, text-medium);
+      transition: color 0.2s;
+
+      &:hover {
+        color: darken(map-get($colors, text-medium), 15%);
+      }
+    }
+
+    &Icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    &Badge {
+      position: absolute;
+      top: -0.25rem;
+      right: -0.25rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      background-color: map-get($colors, error);
+      border-radius: 9999px;
+    }
+  }
+
+  &User {
+    &Name {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: map-get($colors, text-dark);
+    }
+
+    &Role {
+      font-size: 0.75rem;
+      color: map-get($colors, text-medium);
+    }
+
+    &Initials {
+      width: 2rem;
+      height: 2rem;
+      background-color: map-get($colors, primary-light);
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: map-get($colors, bg-white);
+      font-weight: 600;
+    }
+  }
+}
+
+/* ========== Sub Navigation Styles ========== */
+.subNav {
+  &Container {
+    background-color: map-get($colors, bg-white);
+    border-bottom: 1px solid map-get($colors, border);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  &Items {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &Button {
+    padding: 1rem 0.5rem;
+    border-bottom-width: 2px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.active {
+      border-color: map-get($colors, primary-light);
+      color: map-get($colors, primary-light);
+    }
+
+    &.inactive {
+      border-color: transparent;
+      color: map-get($colors, text-medium);
+
+      &:hover {
+        color: darken(map-get($colors, text-dark), 10%);
+      }
+    }
+  }
+}
+
+/* ========== Side Navigation Styles ========== */
+.sideNav {
+  &Container {
+    background-color: map-get($colors, primary);
+    color: map-get($colors, bg-white);
+    transition: all 0.3s;
+    flex-shrink: 0;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    &.open {
+      width: 16rem;
+    }
+
+    &.closed {
+      width: 4rem;
+    }
+  }
+
+  &Header {
+    padding: 1rem;
+  }
+
+  &LogoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &Logo {
+    width: 2rem;
+    height: 2rem;
+    background-color: map-get($colors, primary-light);
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: map-get($colors, bg-white);
+    font-weight: 700;
+  }
+
+  &Title {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: map-get($colors, bg-white);
+  }
+
+  &Subtitle {
+    font-size: 0.75rem;
+    color: lighten(map-get($colors, primary), 40%);
+  }
+
+  &Nav {
+    margin-top: 2rem;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  &Item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: darken(map-get($colors, primary), 5%);
+    }
+
+    &.active {
+      background-color: map-get($colors, primary-light);
+      border-right: 2px solid lighten(map-get($colors, primary-light), 20%);
+    }
+  }
+
+  &Icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  &Text {
+    font-size: 0.875rem;
+  }
+
+  &Footer {
+    position: relative;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  &FooterItems {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  &FooterItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    text-align: left;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: darken(map-get($colors, primary), 5%);
+    }
+  }
+
+  &FooterIcon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* ========== Footer Styles ========== */
+.footer {
+  &Container {
+    background-color: map-get($colors, bg-white);
+    border-top: 1px solid map-get($colors, border);
+    padding: 1rem 1.5rem;
+  }
+
+  &Content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: map-get($colors, text-medium);
+  }
+
+  &LeftSection {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  &RightSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &Divider {
+    color: map-get($colors, border);
+  }
+
+  &Link {
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+
+    &:hover {
+      color: map-get($colors, primary-light);
     }
   }
 }

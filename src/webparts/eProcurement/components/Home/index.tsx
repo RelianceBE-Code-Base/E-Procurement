@@ -13,6 +13,7 @@ import Approvals from '../Approvals'
 import TenderManagement from '../TenderManagement';
 import ContractManagement from '../ContrctManagement';
 import AllRequisitions from '../Requisition/allRequisitions';
+import DepartmentalNeeds from '../DepartmentalNeeds';
 
 
 const FIRSProcurementSystem = () => {
@@ -154,7 +155,9 @@ const FIRSProcurementSystem = () => {
       case 'dashboard':
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
       case 'new-requisition':
-        return <Requisition sampleRequests={sampleRequests} />;
+        return <Requisition />;
+      case 'dept':
+        return <DepartmentalNeeds />;
       case 'approvals':
         return <Approvals sampleRequests={sampleApprovalRequests} />;
       case 'annual':

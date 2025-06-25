@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { useBoolean } from '@fluentui/react-hooks';
 // import { TextField } from '@fluentui/react/lib/TextField';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from '@fluentui/react/lib/DetailsList';
@@ -8,6 +9,7 @@ import { IconButton, DefaultButton, PrimaryButton } from '@fluentui/react/lib/Bu
 // import { DialogType, Dialog, DialogFooter } from '@fluentui/react/lib/Dialog';
 // import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import DepartmentNeedsForm from './DepartmentalNeedsForm';
+import MsgBox from '../../Modals/msgBox';
 
 interface IColumnItemStageStyle {
     background: string;
@@ -318,6 +320,19 @@ const DepartmentalNeeds: React.FunctionComponent<{}> = () => {
         }
     ];
 
+    const [showCompletionBox, setShowCompletionBox] = useState(false);
+    const [referenceNumber, setReferenceNumber] = useState<string>("");
+    const [message, setMessage] = useState<string>(``);
+
+
+
+    const openCompletionBox = (item: any) => {
+        setMessage(`Your annual departmental need request has been successfully submitted.
+       
+        The Executive Management will act on the request as appropriate.`)
+        setShowCompletionBox(true)
+        setReferenceNumber(item)
+    }
 
     return (
         <div>
@@ -369,65 +384,20 @@ const DepartmentalNeeds: React.FunctionComponent<{}> = () => {
             </div>
 
             {isDepartmentRequestDialogOpen &&
-                // <Dialog
-                //     hidden={!isDepartmentRequestDialogOpen}
-                //     onDismiss={dismissDepartmentRequestDialog}
-                //     dialogContentProps={dialogContentProps}
-                //     modalProps={{
-                //         isBlocking: true,
-                //         styles: modalPropsStyles,
-                //     }}
-                //     minWidth={"400px"}
-                // >
-                //     <Stack
-                //         tokens={{ childrenGap: 10 }}
-                //     >
-                //         <TextField
-                //             label="Role Name"
-                //             // value={disciplineName}
-                //             // onChange={onChangeDisciplineName}
-                //             placeholder="Enter Role Name"
-                //             styles={{
-                //                 subComponentStyles: {
-                //                     label: {
-                //                         color: 'red'
-                //                     }
-                //                 }
-                //             }}
-                //         />
-                //         <Dropdown
-                //             placeholder="Select actions for discipline"
-                //             label="Actions"
-                //             // selectedKeys={selectedActions}
-                //             options={actionOptions}
-                //         // multiSelect
-                //         // onChange={onChangeActionsDropdown}
-                //         />
-                //     </Stack>
-                //     <DialogFooter
-                //         styles={{
-                //             actions: {
-                //                 paddingTop: '20px',
-                //                 paddingBottom: '20px',
-                //                 display: 'flex',
-                //                 justifyContent: 'center',
-                //             }
-                //         }}
-                //     >
-                //         <DefaultButton
-                //             // onClick={dismissDialog}
-                //             text="Cancel" />
-                //         <PrimaryButton
-                //             // onClick={dismissDialog}
-                //             text="Create"
-                //         // className={classNames.submitButton}
-                //         />
-                //     </DialogFooter>
-                // </Dialog>
                 <DepartmentNeedsForm
                     isOpen={isDepartmentRequestDialogOpen}
                     onDismiss={dismissDepartmentRequestDialog}
-                    />
+                    openCompletionBox={openCompletionBox}
+                />
+            }
+
+            {showCompletionBox &&
+                <MsgBox
+                    isOpen={showCompletionBox}
+                    onDismiss={() => setShowCompletionBox(false)}
+                    referenceNumber={referenceNumber}
+                    message={message} action={'Department Need Request Initiated'}
+                />
             }
         </div>
     );

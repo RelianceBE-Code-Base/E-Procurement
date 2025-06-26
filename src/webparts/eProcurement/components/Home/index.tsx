@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 //import styles from '../EProcurement.module.scss';
-import { FileText, CheckCircle, Plus, Home, BarChart3, ShoppingCart, ClipboardList, DollarSign, Archive, Milestone, Building } from 'lucide-react';
+import { FileText, CheckCircle, Plus, Home, ShoppingCart, ClipboardList, DollarSign, Archive, Milestone, Building, Projector } from 'lucide-react';
 import SideNav from '../SideNavigation';
 import TopNavigation from '../TopNavigation';
 import SubNavigation from '../SubNavigation';
@@ -15,6 +15,9 @@ import ContractManagement from '../ContractManagement';
 import AllRequisitions from '../Requisition/allRequisitions';
 import DepartmentalNeeds from '../DepartmentalNeeds';
 import PaymentProcessing from '../PaymentProcessing';
+import Archived from '../Archived';
+import StageDetailModal from '../../Modals/stageDetailModal';
+import ProjectManagement from '../ProjectManagment';
 
 
 const FIRSProcurementSystem = () => {
@@ -174,9 +177,9 @@ const FIRSProcurementSystem = () => {
       { id: 'approvals', name: 'Approvals', icon: CheckCircle },
       { id: 'tenders', name: 'Tender Management', icon: ShoppingCart },
       { id: 'contracts', name: 'Contract Management', icon: ClipboardList },
+      { id: 'project', name: 'Project Managment', icon: Projector },
       { id: 'payments', name: 'Payment Processing', icon: DollarSign },
-      { id: 'reports', name: 'Reports & Analytics', icon: BarChart3 },
-      { id: 'archive', name: 'Archive', icon: Archive }
+      { id: 'archived', name: 'Archive', icon: Archive }
     ];
   
     const subtabsByMainTab = {
@@ -205,8 +208,32 @@ const FIRSProcurementSystem = () => {
         { id: 'pending', name: 'pending Review' },
         { id: 'approved', name: 'approved' },
         { id: 'rejected', name: 'rejected' }
+      ],
+      archived: [
+        { id: 'memo', name: 'Memo' },
+        { id: 'sbd', name: 'SBDs' },
+        { id: 'tender', name: 'Tenders' }
+      ],
+      project: [
+        { id: 'memo', name: 'Memo' },
+        { id: 'sbd', name: 'SBDs' },
+        { id: 'tender', name: 'Tenders' }
       ]
     };
+
+    const sampleArchivedDocuments = [
+      { documentId: "DOC-2023-001", title: "2023 Office Furniture Tender Docs", department: "Admin", type: "Tender Document", status: "Archived", dateArchived: "2024-01-15", archivedBy: "John Okeke", referenceNo: "REF-ADM-001", remarks: "Final copy submitted and signed" },
+      { documentId: "DOC-2023-002", title: "Vehicle Maintenance Framework", department: "Transport", type: "Contract Agreement", status: "Archived", dateArchived: "2024-02-28", archivedBy: "Martha Egwu", referenceNo: "REF-TRN-003", remarks: "Superseded by 2024 agreement" },
+      { documentId: "DOC-2023-003", title: "2022 Laptops Procurement Bids", department: "ICT", type: "Bid Submission", status: "Archived", dateArchived: "2024-03-10", archivedBy: "Abdul Musa", referenceNo: "REF-ICT-021", remarks: "All bids uploaded and verified" },
+      { documentId: "DOC-2023-004", title: "Cleaning Services RFP", department: "Facility Mgt", type: "Request for Proposal", status: "Archived", dateArchived: "2024-04-05", archivedBy: "Emeka Obi", referenceNo: "REF-FCL-010", remarks: "Vendor evaluation completed" },
+      { documentId: "DOC-2023-005", title: "Purchase Order for Printers", department: "ICT", type: "Purchase Order", status: "Archived", dateArchived: "2024-03-29", archivedBy: "Faith O. Ibe", referenceNo: "REF-ICT-045", remarks: "Fulfilled; invoice processed" },
+      { documentId: "DOC-2023-006", title: "Approved Budget - Procurement 2023", department: "Finance", type: "Budget Document", status: "Archived", dateArchived: "2024-01-02", archivedBy: "Grace Nnamani", referenceNo: "REF-FIN-099", remarks: "Approved by management" },
+      { documentId: "DOC-2023-007", title: "Procurement Plan 2023", department: "Procurement", type: "Annual Plan", status: "Archived", dateArchived: "2024-01-10", archivedBy: "Sani Usman", referenceNo: "REF-PROC-010", remarks: "Replaced by 2024 plan" },
+      { documentId: "DOC-2023-008", title: "Vendor Contract - XYZ Ltd", department: "Legal", type: "Vendor Contract", status: "Archived", dateArchived: "2024-02-19", archivedBy: "Amina Yusuf", referenceNo: "REF-LGL-056", remarks: "Archived after termination clause" },
+      { documentId: "DOC-2023-009", title: "Evaluation Report - Vehicle Bids", department: "Transport", type: "Evaluation Report", status: "Archived", dateArchived: "2024-04-12", archivedBy: "Kingsley Idoko", referenceNo: "REF-TRN-021", remarks: "Included in audit file" },
+      { documentId: "DOC-2023-010", title: "Goods Receipt Note - IT Equipment", department: "ICT", type: "Goods Receipt Note", status: "Archived", dateArchived: "2024-05-01", archivedBy: "Rachel Adeyemi", referenceNo: "REF-ICT-078", remarks: "Verified and signed by storekeeper" }
+    ];
+    
   
   const renderMainContent = () => {
     switch (activeTab) {
@@ -230,13 +257,17 @@ const FIRSProcurementSystem = () => {
         return <DepartmentalNeeds />;
       case 'payments':
         return <PaymentProcessing sampleRequests={samplePaymentProcessingRequests}/>;
-      default:
+      case 'archived':
+        return <Archived sampleArchivedRequests={sampleArchivedDocuments}/>;
+      case 'project':
+        return <ProjectManagement sampleArchivedRequests={sampleArchivedDocuments}/>;
+        default:
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
     }
   };
-  console.log(selectedStage)
+
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gray-100 flex h-screen">
       {/* Side Navigation */}
       <SideNav
         sidenavOpen={sidenavOpen}
@@ -247,7 +278,7 @@ const FIRSProcurementSystem = () => {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Navigation */}
         <TopNavigation sidenavOpen={sidenavOpen} setSidenavOpen={setSidenavOpen} />
 
@@ -260,7 +291,7 @@ const FIRSProcurementSystem = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 overflow-y-auto p-6">
           {renderMainContent()}
         </main>
 
@@ -269,7 +300,7 @@ const FIRSProcurementSystem = () => {
       </div>
 
       {/* Stage Detail Modal */}
-      {/* <StageDetailModal selectedStage={selectedStage} setSelectedStage={setSelectedStage} /> */}
+      <StageDetailModal selectedStage={selectedStage} setSelectedStage={setSelectedStage} />
     </div>
   );
 };

@@ -37,15 +37,15 @@ const FIRSProcurementSystem = () => {
 
   const sampleRequests = [
     { id: "REQ-2023-001", title: "Office Furniture Procurement", department: "Admin", status: "In Progress", stage: "Tender Evaluation", priority: "Medium", amount: "₦2,500,000", tenderStatus: "Validated" },
-    { id: "REQ-2023-002", title: "IT Equipment Upgrade", department: "ICT", status: "Pending Approval", stage: "EC Review", priority: "High", amount: "₦15,000,000", tenderStatus: "Validated" },
-    { id: "REQ-2023-003", title: "Vehicle Maintenance Services", department: "Transport", status: "Completed", stage: "Payment Processing", priority: "Low", amount: "₦800,000", tenderStatus: "Validated" },
+    { id: "REQ-2023-002", title: "IT Equipment Upgrade", department: "ICT", status: "Pending Approval", stage: "EC Review", priority: "High", amount: "₦15,000,000", tenderStatus: "Project Created" },
+    { id: "REQ-2023-003", title: "Vehicle Maintenance Services", department: "Transport", status: "Completed", stage: "Payment Processing", priority: "Low", amount: "₦800,000", tenderStatus: "SBD Distributed" },
     { id: "REQ-2024-004", title: "Generator Replacement", department: "Facilities", status: "Rejected", stage: "Initial Screening", priority: "High", amount: "₦6,750,000", tenderStatus: "Assigned" },
-    { id: "REQ-2024-005", title: "Training for New Recruits", department: "HR", status: "Approved", stage: "Budget Allocation", priority: "Medium", amount: "₦1,200,000", tenderStatus: "Assigned" },
-    { id: "REQ-2024-006", title: "Cloud Storage Subscription", department: "ICT", status: "Pending Approval", stage: "HOD Review", priority: "High", amount: "₦3,000,000", tenderStatus: "SBD Prepared" },
+    { id: "REQ-2024-005", title: "Training for New Recruits", department: "HR", status: "Approved", stage: "Budget Allocation", priority: "Medium", amount: "₦1,200,000", tenderStatus: "SBD Distributed" },
+    { id: "REQ-2024-006", title: "Cloud Storage Subscription", department: "ICT", status: "Pending Approval", stage: "HOD Review", priority: "High", amount: "₦3,000,000", tenderStatus: "Project Created" },
     { id: "REQ-2024-007", title: "Conference Room Upgrade", department: "Admin", status: "In Progress", stage: "Vendor Engagement", priority: "Medium", amount: "₦5,500,000", tenderStatus: "SBD Prepared" },
-    { id: "REQ-2024-008", title: "Fleet Expansion", department: "Transport", status: "Completed", stage: "Final Audit", priority: "High", amount: "₦22,000,000", tenderStatus: "Awaiting Approval" },
+    { id: "REQ-2024-008", title: "Fleet Expansion", department: "Transport", status: "Completed", stage: "Final Audit", priority: "High", amount: "₦22,000,000", tenderStatus: "Tender Assigned" },
     { id: "REQ-2025-009", title: "ERP License Renewal", department: "ICT", status: "In Progress", stage: "Procurement Approval", priority: "High", amount: "₦9,000,000", tenderStatus: "Approved" },
-    { id: "REQ-2025-010", title: "Medical Supplies Procurement", department: "Health", status: "Pending Approval", stage: "Internal Review", priority: "High", amount: "₦4,300,000", tenderStatus: "Validated" },
+    { id: "REQ-2025-010", title: "Medical Supplies Procurement", department: "Health", status: "Pending Approval", stage: "Internal Review", priority: "High", amount: "₦4,300,000", tenderStatus: "Tender Assigned" },
   ];
 
 
@@ -198,7 +198,7 @@ const FIRSProcurementSystem = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto max-h-full">
           {renderMainContent()}
         </main>
 

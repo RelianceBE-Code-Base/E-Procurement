@@ -20,7 +20,7 @@ interface IApprovals {
     sampleRequests: any;
 }
 
-const ProcurementDashboard: React.FC<IApprovals> = ({ sampleRequests }) => {
+const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
     const [approvalItems, setApprovalItems] = React.useState<IApprovalItem[]>(sampleRequests);
     const [activeTab, setActiveTab] = React.useState<'pending' | 'all'>('pending');
     const [selectedItem, setSelectedItem] = React.useState<IApprovalItem | null>(null);
@@ -437,4 +437,4 @@ const ProcurementDashboard: React.FC<IApprovals> = ({ sampleRequests }) => {
     );
 };
 
-export default ProcurementDashboard;
+export default ProcurementApprovals;

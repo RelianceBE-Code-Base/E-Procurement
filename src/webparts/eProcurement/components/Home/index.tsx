@@ -44,13 +44,18 @@ const FIRSProcurementSystem = () => {
     { id: "REQ-2023-002", title: "IT Equipment Upgrade", department: "ICT", status: "Pending Approval", stage: "EC Review", priority: "High", amount: "₦15,000,000", tenderStatus: "Project Created" },
     { id: "REQ-2023-003", title: "Vehicle Maintenance Services", department: "Transport", status: "Completed", stage: "Payment Processing", priority: "Low", amount: "₦800,000", tenderStatus: "SBD Distributed" },
     { id: "REQ-2024-004", title: "Generator Replacement", department: "Facilities", status: "Rejected", stage: "Initial Screening", priority: "High", amount: "₦6,750,000", tenderStatus: "Assigned" },
-    { id: "REQ-2024-005", title: "Training for New Recruits", department: "HR", status: "Approved", stage: "Budget Allocation", priority: "Medium", amount: "₦1,200,000", tenderStatus: "SBD Distributed" },
-    { id: "REQ-2024-006", title: "Cloud Storage Subscription", department: "ICT", status: "Pending Approval", stage: "HOD Review", priority: "High", amount: "₦3,000,000", tenderStatus: "Project Created" },
     { id: "REQ-2024-007", title: "Conference Room Upgrade", department: "Admin", status: "In Progress", stage: "Vendor Engagement", priority: "Medium", amount: "₦5,500,000", tenderStatus: "SBD Prepared" },
     { id: "REQ-2024-008", title: "Fleet Expansion", department: "Transport", status: "Completed", stage: "Final Audit", priority: "High", amount: "₦22,000,000", tenderStatus: "Tender Assigned" },
-    { id: "REQ-2025-009", title: "ERP License Renewal", department: "ICT", status: "In Progress", stage: "Procurement Approval", priority: "High", amount: "₦9,000,000", tenderStatus: "Approved" },
-    { id: "REQ-2025-010", title: "Medical Supplies Procurement", department: "Health", status: "Pending Approval", stage: "Internal Review", priority: "High", amount: "₦4,300,000", tenderStatus: "Tender Assigned" },
+    { id: "REQ-2025-009", title: "ERP License Renewal", department: "ICT", status: "In Progress", stage: "Procurement Approval", priority: "High", amount: "₦9,000,000", tenderStatus: "Awaiting Review" },
+    { id: "REQ-2025-011", title: "Security System Installation", department: "Security", status: "In Progress", stage: "Tender Evaluation", priority: "High", amount: "₦11,000,000", tenderStatus: "Evaluation Completed" },
+    { id: "REQ-2025-012", title: "Public Awareness Campaign", department: "PR", status: "Pending Approval", stage: "EC Review", priority: "Medium", amount: "₦7,800,000", tenderStatus: "Memo Prepared" },
+    { id: "REQ-2025-013", title: "IT Security Audit", department: "ICT", status: "Pending Approval", stage: "Approval Routing", priority: "High", amount: "₦13,500,000", tenderStatus: "Executive Chairman Approval" },
+    { id: "REQ-2025-014", title: "Renovation of Office Block A", department: "Facilities", status: "Pending Approval", stage: "EC Review", priority: "High", amount: "₦25,000,000", tenderStatus: "Tenders Board Approval" },
+    { id: "REQ-2025-015", title: "Nationwide Survey Project", department: "Research", status: "Pending Approval", stage: "Approval Routing", priority: "High", amount: "₦120,000,000", tenderStatus: "FEC Approval" },
+    { id: "REQ-2025-020", title: "Public Sector Policy Consultancy", department: "Planning", status: "Pending Approval", stage: "Procurement Approval", priority: "Medium", amount: "₦32,000,000", tenderStatus: "BPP Approval" },
+    { id: "REQ-2025-021", title: "Rural Electrification Project", department: "Energy", status: "In Progress", stage: "Final Routing", priority: "High", amount: "₦88,000,000", tenderStatus: "Approved" },
   ];
+  
 
 
     const sampleApprovalRequests = [

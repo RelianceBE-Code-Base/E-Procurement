@@ -2,11 +2,27 @@ import * as React from 'react';
 import { Eye, Filter, EllipsisVertical, X, User, FolderOpen, FileText, Send, CheckCircle, ChevronLeft, ChevronRight, Save } from 'lucide-react';
 import { useState } from 'react';
 
+type ApprovalThresholds = {
+  executiveChairman: number;
+  tendersBoard: number;
+  bpp: number;
+  fec: number;
+};
+
+
 interface ITenderManagement {
   stages?: any;
   setSelectedStage?: any;
   sampleRequests?: any;
+  approvalThresholds?: ApprovalThresholds;
 }
+
+const DEFAULT_THRESHOLDS: ApprovalThresholds = {
+  executiveChairman: 50000000,
+  tendersBoard: 200000000,
+  bpp: 500000000,
+  fec: 1000000000
+};
 
 const procurementOfficers = [
   { id: 1, name: "John Doe", department: "Procurement", email: "john.doe@company.com" },
@@ -15,7 +31,8 @@ const procurementOfficers = [
   { id: 4, name: "Emily Davis", department: "Procurement", email: "emily.davis@company.com" }
 ];
 
-const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initialRequests }) => {
+
+const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initialRequests, approvalThresholds = DEFAULT_THRESHOLDS }) => {
   const [showCompletionBox, setShowCompletionBox] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
   const [showRecordModal, setShowRecordModal] = useState(false);
@@ -36,6 +53,18 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
   const [distributionMethod, setDistributionMethod] = useState('');
   const [interestedBidders, setInterestedBidders] = useState<string[]>([]);
   const [newBidder, setNewBidder] = useState('');
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showMemoModal, setShowMemoModal] = useState(false);
+  const [showForwardMemoModal, setShowForwardMemoModal] = useState(false);
+  const [showExecutiveChairmanModal, setShowExecutiveChairmanModal] = useState(false);
+  const [showTendersBoardModal, setShowTendersBoardModal] = useState(false);
+  const [showBppModal, setShowBppModal] = useState(false);
+  const [showFecModal, setShowFecModal] = useState(false);
+
+  // Memo state
+  const [memoContent, setMemoContent] = useState('');
+  const [recommendation, setRecommendation] = useState('');
+  const [reviewComments, setReviewComments] = useState('');
 
   const tabs = [
     { id: 'assign_tender_id', title: 'Assign Tender', status: 'Project Created' },
@@ -671,10 +700,352 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
     );
   };
 
+  // Determine next approval authority based on amount
+  const getNextApprovalAuthority = (amount: number) => {
+    if (amount < approvalThresholds.executiveChairman) return 'Executive Chairman';
+    if (amount < approvalThresholds.tendersBoard) return 'Tenders Board';
+    if (amount < approvalThresholds.bpp) return 'BPP';
+    return 'FEC';
+  };
+
+  // Handle review and endorsement
+  const handleReviewEndorse = () => {
+    if (!selectedRequest) return;
+
+    updateRequestStatus(selectedRequest.id, 'Evaluation Completed', {
+      evaluationEndorsed: true,
+      evaluationEndorsedDate: new Date().toISOString(),
+      evaluationComments: reviewComments
+    });
+
+    setMessage('Tender Evaluation Report has been reviewed and endorsed');
+    setShowCompletionBox(true);
+    setShowReviewModal(false);
+    setReviewComments('');
+  };
+
+  // Handle memo preparation
+  const handlePrepareMemo = () => {
+    if (!selectedRequest) return;
+
+    updateRequestStatus(selectedRequest.id, 'Memo Prepared', {
+      memoPrepared: true,
+      memoContent,
+      recommendation,
+      memoDate: new Date().toISOString()
+    });
+
+    setMessage('Memo with recommendations has been prepared');
+    setShowCompletionBox(true);
+    setShowMemoModal(false);
+    setMemoContent('');
+    setRecommendation('');
+  };
+
+  // Handle forwarding memo
+  const handleForwardMemo = () => {
+    if (!selectedRequest) return;
+
+    const nextAuthority = getNextApprovalAuthority(parseFloat(selectedRequest.amount.replace(/[^0-9.]/g, '')));
+
+    updateRequestStatus(selectedRequest.id, nextAuthority + ' Approval', {
+      memoForwarded: true,
+      memoForwardedDate: new Date().toISOString(),
+      currentApprovalAuthority: nextAuthority
+    });
+
+    setMessage(`Memo has been forwarded to ${nextAuthority} via Coordination Director`);
+    setShowCompletionBox(true);
+    setShowForwardMemoModal(false);
+  };
+
+  // Handle approval at each level
+  const handleApproval = (level: string, approved: boolean) => {
+    if (!selectedRequest) return;
+    const getThresholdValue = (level: string, thresholds: ApprovalThresholds): number => {
+      const levelKey = level.toLowerCase().replace(' ', '') as keyof ApprovalThresholds;
+      return thresholds[levelKey];
+    };
+
+    const comments = level === 'Executive Chairman' ? reviewComments : '';
+    const amount = parseFloat(selectedRequest.amount.replace(/[^0-9.]/g, ''));
+    const nextAuthority = getNextApprovalAuthority(amount);
+
+    // Use the type-safe threshold access
+    const currentLevelThreshold = getThresholdValue(level, approvalThresholds);
+
+    if (approved && amount >= currentLevelThreshold) {
+      // Move to next approval level if required
+      updateRequestStatus(selectedRequest.id, nextAuthority + ' Approval', {
+        [`${level.toLowerCase().replace(' ', '')}Approved`]: true,
+        [`${level.toLowerCase().replace(' ', '')}ApprovalDate`]: new Date().toISOString(),
+        [`${level.toLowerCase().replace(' ', '')}Comments`]: comments,
+        currentApprovalAuthority: nextAuthority
+      });
+
+      setMessage(`${level} has approved and forwarded to ${nextAuthority}`);
+    } else if (approved) {
+      // Final approval
+      updateRequestStatus(selectedRequest.id, 'Approved', {
+        [`${level.toLowerCase().replace(' ', '')}Approved`]: true,
+        [`${level.toLowerCase().replace(' ', '')}ApprovalDate`]: new Date().toISOString(),
+        [`${level.toLowerCase().replace(' ', '')}Comments`]: comments,
+        approvedDate: new Date().toISOString()
+      });
+
+      setMessage(`Tender has been fully approved by ${level}`);
+    } else {
+      // Rejected
+      updateRequestStatus(selectedRequest.id, 'Rejected', {
+        [`${level.toLowerCase().replace(' ', '')}Rejected`]: true,
+        [`${level.toLowerCase().replace(' ', '')}RejectionDate`]: new Date().toISOString(),
+        [`${level.toLowerCase().replace(' ', '')}Comments`]: comments
+      });
+
+      setMessage(`Tender has been rejected by ${level}`);
+    }
+
+    // Close the appropriate modal
+    if (level === 'Executive Chairman') setShowExecutiveChairmanModal(false);
+    if (level === 'Tenders Board') setShowTendersBoardModal(false);
+    if (level === 'BPP') setShowBppModal(false);
+    if (level === 'FEC') setShowFecModal(false);
+
+    setShowCompletionBox(true);
+    setReviewComments('');
+  };
+
+  // New modal components
+  const renderReviewModal = () => {
+    if (!showReviewModal || !selectedRequest) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Review & Endorse Evaluation Report</h2>
+            <button onClick={() => setShowReviewModal(false)} className="text-gray-500 hover:text-gray-700">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-gray-600">
+              Please review the tender evaluation report and provide your endorsement:
+            </p>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Review Comments
+              </label>
+              <textarea
+                value={reviewComments}
+                onChange={(e) => setReviewComments(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"
+                placeholder="Enter any comments on the evaluation..."
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              onClick={() => setShowReviewModal(false)}
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleReviewEndorse}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Endorse Evaluation
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderMemoModal = () => {
+    if (!showMemoModal || !selectedRequest) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Prepare Recommendation Memo</h2>
+            <button onClick={() => setShowMemoModal(false)} className="text-gray-500 hover:text-gray-700">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Memo Content
+              </label>
+              <textarea
+                value={memoContent}
+                onChange={(e) => setMemoContent(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"
+                placeholder="Enter memo content..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Recommendation
+              </label>
+              <select
+                value={recommendation}
+                onChange={(e) => setRecommendation(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select recommendation</option>
+                <option value="Approve">Approve</option>
+                <option value="Approve with Conditions">Approve with Conditions</option>
+                <option value="Reject">Reject</option>
+                <option value="Request Further Evaluation">Request Further Evaluation</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              onClick={() => setShowMemoModal(false)}
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handlePrepareMemo}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              disabled={!memoContent || !recommendation}
+            >
+              Finalize Memo
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderForwardMemoModal = () => {
+    if (!showForwardMemoModal || !selectedRequest) return null;
+
+    const nextAuthority = getNextApprovalAuthority(parseFloat(selectedRequest.amount.replace(/[^0-9.]/g, '')));
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Forward Recommendation Memo</h2>
+            <button onClick={() => setShowForwardMemoModal(false)} className="text-gray-500 hover:text-gray-700">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-gray-600">
+              The memo will be forwarded to {nextAuthority} via the Coordination Director.
+            </p>
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-medium text-blue-800 mb-2">Memo Details:</h4>
+              <p className="text-sm text-blue-700">{selectedRequest.memoContent}</p>
+              <p className="text-sm font-medium text-blue-800 mt-2">
+                Recommendation: {selectedRequest.recommendation}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              onClick={() => setShowForwardMemoModal(false)}
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleForwardMemo}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Forward Memo
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Similar approval modals can be created for Executive Chairman, Tenders Board, BPP, and FEC
+  // Here's a generic one that can be adapted for each level
+  const renderApprovalModal = (level: string, show: boolean, setShow: any) => {
+    if (!show || !selectedRequest) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">{level} Approval</h2>
+            <button onClick={() => setShow(false)} className="text-gray-500 hover:text-gray-700">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-gray-600">
+              {level} is reviewing the tender for approval.
+            </p>
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-medium text-blue-800 mb-2">Tender Summary:</h4>
+              <p className="text-sm text-blue-700">
+                <strong>Title:</strong> {selectedRequest.title}<br />
+                <strong>Amount:</strong> {selectedRequest.amount}<br />
+                <strong>Recommendation:</strong> {selectedRequest.recommendation}
+              </p>
+            </div>
+
+            {level === 'Executive Chairman' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Approval Comments
+                </label>
+                <textarea
+                  value={reviewComments}
+                  onChange={(e) => setReviewComments(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"
+                  placeholder="Enter approval comments..."
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <button
+              onClick={() => handleApproval(level, false)}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            >
+              Reject
+            </button>
+            <button
+              onClick={() => handleApproval(level, true)}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              Approve
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Update the ActionDropdown component to include the new actions
   const ActionDropdown = ({ request }: { request: any }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    if (request.tenderStatus === 'Approved' || request.tenderStatus === 'Awaiting Approval') {
+    if (request.tenderStatus === 'Approved' || request.tenderStatus === 'Rejected') {
       return null;
     }
 
@@ -686,6 +1057,13 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
         case 'Tender Assigned': return 'Prepare SBD';
         case 'SBD Prepared': return 'Distribute SBD';
         case 'SBD Distributed': return 'Seek Approvals';
+        case 'Awaiting Review': return 'Review Evaluation';
+        case 'Evaluation Completed': return 'Prepare Memo';
+        case 'Memo Prepared': return 'Forward Memo';
+        case 'Executive Chairman Approval': return 'Executive Chairman Review';
+        case 'Tenders Board Approval': return 'Tenders Board Review';
+        case 'BPP Approval': return 'BPP Review';
+        case 'FEC Approval': return 'FEC Review';
         default: return 'Process';
       }
     };
@@ -697,6 +1075,34 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
           break;
         case 'Assigned':
           handleCreateProjectClick(request);
+          break;
+        case 'Awaiting Review':
+          setSelectedRequest(request);
+          setShowReviewModal(true);
+          break;
+        case 'Evaluation Completed':
+          setSelectedRequest(request);
+          setShowMemoModal(true);
+          break;
+        case 'Memo Prepared':
+          setSelectedRequest(request);
+          setShowForwardMemoModal(true);
+          break;
+        case 'Executive Chairman Approval':
+          setSelectedRequest(request);
+          setShowExecutiveChairmanModal(true);
+          break;
+        case 'Tenders Board Approval':
+          setSelectedRequest(request);
+          setShowTendersBoardModal(true);
+          break;
+        case 'BPP Approval':
+          setSelectedRequest(request);
+          setShowBppModal(true);
+          break;
+        case 'FEC Approval':
+          setSelectedRequest(request);
+          setShowFecModal(true);
           break;
         default:
           handleActionClick(request);
@@ -722,12 +1128,13 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
             >
               {request.tenderStatus === 'Validated' && <User className="w-4 h-4" />}
               {request.tenderStatus === 'Assigned' && <FolderOpen className="w-4 h-4" />}
-              {(request.tenderStatus === 'Project Created' ||
-                request.tenderStatus === 'Tender Assigned' ||
-                request.tenderStatus === 'SBD Prepared' ||
-                request.tenderStatus === 'SBD Distributed') && (
-                  <FileText className="w-4 h-4" />
-                )}
+              {request.tenderStatus === 'Awaiting Review' && <FileText className="w-4 h-4" />}
+              {request.tenderStatus === 'Evaluation Completed' && <FileText className="w-4 h-4" />}
+              {request.tenderStatus === 'Memo Prepared' && <Send className="w-4 h-4" />}
+              {(request.tenderStatus === 'Executive Chairman Approval' ||
+                request.tenderStatus === 'Tenders Board Approval' ||
+                request.tenderStatus === 'BPP Approval' ||
+                request.tenderStatus === 'FEC Approval') && <CheckCircle className="w-4 h-4" />}
               {getActionLabel()}
             </button>
           </div>
@@ -735,6 +1142,7 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
       </div>
     );
   };
+
 
   return (
     <main className="flex-1 p-6 overflow-auto">
@@ -809,6 +1217,13 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
       {renderAssignOfficerModal()}
       {renderCreateProjectModal()}
       {renderRecordModal()}
+      {renderReviewModal()}
+      {renderMemoModal()}
+      {renderForwardMemoModal()}
+      {renderApprovalModal('Executive Chairman', showExecutiveChairmanModal, setShowExecutiveChairmanModal)}
+      {renderApprovalModal('Tenders Board', showTendersBoardModal, setShowTendersBoardModal)}
+      {renderApprovalModal('BPP', showBppModal, setShowBppModal)}
+      {renderApprovalModal('FEC', showFecModal, setShowFecModal)}
 
       {/* Completion Message Box */}
       {showCompletionBox && (

@@ -32,69 +32,6 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
 
     <main className="flex-1 p-6 overflow-auto">
       <div className="space-y-6">
-        {/* Stats Cards */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600">Active Requests</p>
-                      <p className="text-2xl font-bold text-blue-600">24</p>
-                    </div>
-                    <FileText className="w-8 h-8 text-blue-500" />
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600">Pending Approvals</p>
-                      <p className="text-2xl font-bold text-yellow-600">12</p>
-                    </div>
-                    <Clock className="w-8 h-8 text-yellow-500" />
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600">Completed</p>
-                      <p className="text-2xl font-bold text-green-600">156</p>
-                    </div>
-                    <CheckCircle className="w-8 h-8 text-green-500" />
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600">Total Value</p>
-                      <p className="text-2xl font-bold text-purple-600">₦2.4B</p>
-                    </div>
-                    <DollarSign className="w-8 h-8 text-purple-500" />
-                  </div>
-                </div>
-              </div> */}
-
-        {/* Process Workflow */}
-        {/* <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold mb-4">Procurement Process Workflow</h3>
-                <div className="overflow-x-auto">
-                  <div className="flex gap-2 min-w-max pb-4">
-                    <div className="px-3 py-2 rounded-lg text-white text-sm bg-green-500 cursor-pointer hover:opacity-80 whitespace-nowrap">
-                      Stage 0: Annual Procurement Preparation
-                    </div>
-                    <ChevronRight className="w-4 h-4 mx-2 text-gray-400 flex-shrink-0 self-center" />
-                    <div className="px-3 py-2 rounded-lg text-white text-sm bg-blue-500 cursor-pointer hover:opacity-80 whitespace-nowrap">
-                      Stage 1: Requisition Initiation
-                    </div>
-                    <ChevronRight className="w-4 h-4 mx-2 text-gray-400 flex-shrink-0 self-center" />
-                    <div className="px-3 py-2 rounded-lg text-white text-sm bg-yellow-500 cursor-pointer hover:opacity-80 whitespace-nowrap">
-                      Stage 2: EC Approval & Routing
-                    </div>
-                    <ChevronRight className="w-4 h-4 mx-2 text-gray-400 flex-shrink-0 self-center" />
-                    <div className="px-3 py-2 rounded-lg text-white text-sm bg-gray-400 cursor-pointer hover:opacity-80 whitespace-nowrap">
-                      Stage 3: Procurement Plan Validation
-                    </div>
-                  </div>
-                </div>
-              </div> */}
 
         {/* Recent Requests Table */}
         <div className="bg-white rounded-lg shadow p-6">

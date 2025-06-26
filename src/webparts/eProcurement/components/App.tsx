@@ -14,6 +14,8 @@ const App: React.FC<IEProcurementProps> = (props) => {
       </Routes>
     </HashRouter>
   );
+
+  
 };
 
 export default App;

@@ -198,7 +198,7 @@ const FIRSProcurementSystem = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 p-6 overflow-auto max-h-full">
+        <main className="flex-1 p-6 overflow-auto">
           {renderMainContent()}
         </main>
 

@@ -72,7 +72,7 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
     if (request.distributionMethod) setDistributionMethod(request.distributionMethod);
     if (request.interestedBidders) setInterestedBidders(request.interestedBidders || []);
   };
-  
+
 
   const handleAssignOfficerClick = (request: any) => {
     setSelectedRequest(request);
@@ -575,83 +575,95 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Tender Request Details</h2>
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-gray-900">Tender Request Details</h2>
             <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <h3 className="font-semibold">Basic Information</h3>
-              <div>
-                <p className="text-sm text-gray-500">Request ID</p>
-                <p>{viewingRequest.id}</p>
+          <div className="space-y-4">
+            {/* Basic Information */}
+            <div className="flex justify-between">
+              <div className="w-1/2 pr-2">
+                <p className="text-gray-500 text-sm">Request ID:</p>
+                <p className="text-gray-900 font-mono">{viewingRequest.id}</p>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">Title</p>
-                <p>{viewingRequest.title}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Department</p>
-                <p>{viewingRequest.department}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Amount</p>
-                <p>{viewingRequest.amount}</p>
+              <div className="w-1/2 pl-2">
+                <p className="text-gray-500 text-sm">Title:</p>
+                <p className="text-gray-900">{viewingRequest.title}</p>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <h3 className="font-semibold">Status Information</h3>
-              <div>
-                <p className="text-sm text-gray-500">Current Stage</p>
-                <p>{viewingRequest.stage}</p>
+            <div className="flex justify-between">
+              <div className="w-1/2 pr-2">
+                <p className="text-gray-500 text-sm">Department:</p>
+                <p className="text-gray-900">{viewingRequest.department}</p>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">Status</p>
-                <p>{viewingRequest.status}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Priority</p>
-                <p>{viewingRequest.priority}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Tender Status</p>
-                <p>{viewingRequest.tenderStatus || 'Not Started'}</p>
+              <div className="w-1/2 pl-2">
+                <p className="text-gray-500 text-sm">Amount:</p>
+                <p className="text-gray-900 font-bold">{viewingRequest.amount}</p>
               </div>
             </div>
 
+            {/* Status Information */}
+            <div className="flex justify-between">
+              <div className="w-1/2 pr-2">
+                <p className="text-gray-500 text-sm">Current Stage:</p>
+                <p className="text-gray-900">{viewingRequest.stage}</p>
+              </div>
+              <div className="w-1/2 pl-2">
+                <p className="text-gray-500 text-sm">Status:</p>
+                <p className="text-gray-900 capitalize">{viewingRequest.status}</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <div className="w-1/2 pr-2">
+                <p className="text-gray-500 text-sm">Priority:</p>
+                <p className="text-gray-900">{viewingRequest.priority}</p>
+              </div>
+              <div className="w-1/2 pl-2">
+                <p className="text-gray-500 text-sm">Tender Status:</p>
+                <p className="text-gray-900">{viewingRequest.tenderStatus || 'Not Started'}</p>
+              </div>
+            </div>
+
+            {/* Assigned Officer */}
             {viewingRequest.assignedOfficer && (
-              <div className="space-y-2">
-                <h3 className="font-semibold">Assigned Officer</h3>
-                <div>
-                  <p className="text-sm text-gray-500">Name</p>
-                  <p>{viewingRequest.assignedOfficer}</p>
-                </div>
-                {viewingRequest.assignedOfficerId && (
-                  <div>
-                    <p className="text-sm text-gray-500">Officer ID</p>
-                    <p>{viewingRequest.assignedOfficerId}</p>
+              <>
+                <div className="border-t border-gray-200 my-4"></div>
+                <div className="flex justify-between">
+                  <div className="w-1/2 pr-2">
+                    <p className="text-gray-500 text-sm">Assigned Officer:</p>
+                    <p className="text-gray-900">{viewingRequest.assignedOfficer}</p>
                   </div>
-                )}
-              </div>
+                  {viewingRequest.assignedOfficerId && (
+                    <div className="w-1/2 pl-2">
+                      <p className="text-gray-500 text-sm">Officer ID:</p>
+                      <p className="text-gray-900">{viewingRequest.assignedOfficerId}</p>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
 
+            {/* Tender Details */}
             {viewingRequest.tenderName && (
-              <div className="space-y-2">
-                <h3 className="font-semibold">Tender Details</h3>
-                <div>
-                  <p className="text-sm text-gray-500">Tender Name</p>
-                  <p>{viewingRequest.tenderName}</p>
+              <>
+                <div className="border-t border-gray-200 my-4"></div>
+                <div className="flex justify-between">
+                  <div className="w-1/2 pr-2">
+                    <p className="text-gray-500 text-sm">Tender Name:</p>
+                    <p className="text-gray-900">{viewingRequest.tenderName}</p>
+                  </div>
+                  <div className="w-1/2 pl-2">
+                    <p className="text-gray-500 text-sm">Tender ID:</p>
+                    <p className="text-gray-900">{viewingRequest.tenderId}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-500">Tender ID</p>
-                  <p>{viewingRequest.tenderId}</p>
-                </div>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -713,7 +725,7 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
               {(request.tenderStatus === 'Project Created' ||
                 request.tenderStatus === 'Tender Assigned' ||
                 request.tenderStatus === 'SBD Prepared' ||
-                request.tenderStatus === 'SBD Distributed' ) && (
+                request.tenderStatus === 'SBD Distributed') && (
                   <FileText className="w-4 h-4" />
                 )}
               {getActionLabel()}

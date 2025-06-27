@@ -17,7 +17,8 @@ import DepartmentalNeeds from '../DepartmentalNeeds';
 import PaymentProcessing from '../PaymentProcessing';
 import Archived from '../Archived';
 import StageDetailModal from '../../Modals/stageDetailModal';
-import ProjectManagement from '../ProjectManagment';
+// import ProjectManagement from '../ProjectManagment';
+import ProjectMonitoring from '../ProjectManagment/ProjectMonitoring';
 
 
 const FIRSProcurementSystem = () => {
@@ -214,11 +215,11 @@ const FIRSProcurementSystem = () => {
         { id: 'sbd', name: 'SBDs' },
         { id: 'tender', name: 'Tenders' }
       ],
-      project: [
-        { id: 'memo', name: 'Memo' },
-        { id: 'sbd', name: 'SBDs' },
-        { id: 'tender', name: 'Tenders' }
-      ]
+      // project: [
+      //   { id: 'memo', name: 'Memo' },
+      //   { id: 'sbd', name: 'SBDs' },
+      //   { id: 'tender', name: 'Tenders' }
+      // ]
     };
 
     const sampleArchivedDocuments = [
@@ -260,7 +261,8 @@ const FIRSProcurementSystem = () => {
       case 'archived':
         return <Archived sampleArchivedRequests={sampleArchivedDocuments}/>;
       case 'project':
-        return <ProjectManagement sampleArchivedRequests={sampleArchivedDocuments}/>;
+        // return <ProjectManagement sampleRequests={samplePaymentProcessingRequests}/>;
+        return <ProjectMonitoring />;
         default:
         return <Dashboard stages={stages} setSelectedStage={setSelectedStage} sampleRequests={sampleRequests} />;
     }

@@ -17,6 +17,7 @@ import {
   ProgressIndicator,
 } from "@fluentui/react";
 import ProcurementItemsFluent8, { ProcurementItem } from "./AddItem";
+import { X, ChevronLeft, Save, ChevronRight } from "lucide-react";
 
 const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isOpen: boolean; onDismiss: () => void, openCompletionBox: (item: any) => void }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -56,6 +57,12 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
     { key: "admin", text: "Administration" },
     { key: "hr", text: "Human Resources" },
     { key: "operations", text: "Operations" },
+  ];
+
+  const tabs = [
+    { id: 'assign_tender_id', title: 'Basic Info' },
+    { id: 'prepare_sbd', title: 'Request Details' },
+    { id: 'distribute_sbd', title: 'Items' },
   ];
 
   const handleInputChange = (field: string, value: string) => {
@@ -104,6 +111,7 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
   };
 
   return (
+    <>
     <Dialog
       hidden={!isOpen}
       onDismiss={onDismiss}
@@ -200,6 +208,78 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
         />
       </DialogFooter>
     </Dialog>
+
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Create Procurement Request</h2>
+            <button onClick={onDismiss} className="text-gray-500 hover:text-gray-700">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Progress tabs */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex overflow-x-auto pb-2">
+              {tabs.map((tab, index) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setCurrentStep(index)}
+                  className={`flex-shrink-0 px-4 py-2 border-b-2 font-medium text-sm ${currentStep === index
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                >
+                  {tab.title}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tab content */}
+          <div className="mb-6">
+            {/* {renderTabContent()} */}
+          </div>
+
+          {/* Navigation and action buttons */}
+          <div className="flex justify-between">
+            <div>
+              {currentStep > 0 && (
+                <button
+                onClick={() => (currentStep === 0 ? onDismiss() : setCurrentStep(currentStep - 1))}
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Previous
+                </button>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                Save Progress
+              </button>
+              <button
+                        onClick={() => {
+                          if (currentStep === 2) {
+                            handleSubmit();
+                          } else {
+                            setCurrentStep(currentStep + 1);
+                          }
+                        }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              >
+                {currentStep < tabs.length - 1 ? 'Next' : 'Submit'}
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

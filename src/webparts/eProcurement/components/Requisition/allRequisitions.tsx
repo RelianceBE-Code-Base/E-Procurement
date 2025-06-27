@@ -1,4 +1,4 @@
-import { Eye, Filter, Plus } from 'lucide-react';
+import { Eye, Filter } from 'lucide-react';
 import * as React from 'react';
 import MsgBox from '../../Modals/msgBox';
 import { useState } from 'react';
@@ -15,9 +15,9 @@ const AllRequisitions:React.FC<IAllRequisitions> = ({sampleRequests}) =>{
   const [referenceNumber, setReferenceNumber] = useState<string>("");
   const [message, setMessage] = useState<string>(``);
 
-  const openNewNewRequisition = () => {
-      setShowNewNewRequisition(true)
-  }
+  // const openNewNewRequisition = () => {
+  //     setShowNewNewRequisition(true)
+  // }
 
   const openCompletionBox =(item:any)=>{
       setMessage(`This requisition request has been successfully validated agaist the annual procurement plan.
@@ -34,10 +34,10 @@ const AllRequisitions:React.FC<IAllRequisitions> = ({sampleRequests}) =>{
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">Requisition Requests</h3>
                   <div className="flex gap-2">
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewNewRequisition}>
+                    {/* <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewNewRequisition}>
                       <Plus className="w-4 h-4" />
                       New Request
-                    </button>
+                    </button> */}
                     <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
                       <Filter className="w-4 h-4" />
                       Filter
@@ -97,7 +97,7 @@ const AllRequisitions:React.FC<IAllRequisitions> = ({sampleRequests}) =>{
                     </tbody>
                   </table>
                 </div>
-              </div>
+        </div>
 
               {showNewNewRequisition && <NewAnnualPlan isOpen={showNewNewRequisition} onDismiss={() => setShowNewNewRequisition(false)}/>}
 

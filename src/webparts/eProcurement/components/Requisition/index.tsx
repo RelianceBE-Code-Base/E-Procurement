@@ -1,7 +1,8 @@
-import { DefaultButton, MessageBar, MessageBarType, Modal, Stack } from '@fluentui/react';
+//import { DefaultButton, MessageBar, MessageBarType, Modal, Stack } from '@fluentui/react';
 import * as React from 'react';
 import { useState } from 'react';
 import styles from '../EProcurement.module.scss';
+import MsgBox from '../../Modals/msgBox';
 
 interface IRequistion {
   stages?: any;
@@ -11,13 +12,19 @@ interface IRequistion {
 const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
+  const [referenceNumber, setReferenceNumber] = useState<string>("");
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [description, SetDescription] = useState<string>("")
+  const [message, SetMessage] = useState<string>("")
 
   const handleSubmit = () => {
     setIsSubmitting(true);
     handleReset()
     setReferenceNumber("REQ-2025-005")
+    SetDescription(`•	The Director of Procurement:<br />
+              Reviews the memo, <br />
+              Validates the request against the approved annual procurement plan`)
+    SetMessage("A memo has been generated, addressed to the Executive Chairman (EC) seeking approval to initiate procurement for the stated need.")
     setIsSubmitting(false)
     setIsSubmitted(true)
   }
@@ -125,6 +132,7 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
               </div>
             </div>
           }
+          <div className='flex justify-end'>
           <div className="flex gap-4">
             <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onClick={handleSubmit} disabled={isSubmitting}>
               Submit Request
@@ -133,10 +141,14 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
               Save as Draft
             </button>
           </div>
+          </div>
         </div>
       </div>
 
-      <Modal
+      {/* //Show msg Box */}
+      <MsgBox isOpen={isSubmitted} onDismiss={() => {handleReset(); onDismiss(); setIsSubmitted(false)}} action={'Submitted Successfully!'} referenceNumber={referenceNumber} message={message} description={description}/>
+      
+      {/* <Modal
         isOpen={isSubmitted}
         onDismiss={() => {
           handleReset();
@@ -153,15 +165,13 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
               styles={{ root: { marginBottom: '16px' } }}
               isMultiline={true}
             >
-              <strong>Submitted Successfully!</strong><br /><br />
+              <strong></strong><br /><br />
               A memo has been generated, addressed to the Executive Chairman (EC) seeking approval to initiate procurement for the stated need.<br /><br />
               Reference Number: <strong>{referenceNumber}</strong><br />
               <br />
               Once Executive Chairman (EC) approves, the memo is forwarded to the Director of Procurement for action
               <br />
-              •	The Director of Procurement:
-              Reviews the memo,
-              Validates the request against the approved annual procurement plan
+
 
 
             </MessageBar>
@@ -177,7 +187,7 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
             </Stack>
           </Stack>
         </div>
-      </Modal>
+      </Modal> */}
     </>
   )
 

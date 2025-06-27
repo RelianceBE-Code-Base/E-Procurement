@@ -22,7 +22,7 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
 
   const openCompletionBox = (item: any) => {
     setMessage(`This annual procurement plan has been marked completed.
-        
+        <br />
         User department can now initate requisition for this procurement plan`)
     setShowCompletionBox(true)
     setReferenceNumber(item)
@@ -104,6 +104,7 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
       </div>
 
       {showNewAnnualPlan && <NewAnnualPlan isOpen={showNewAnnualPlan} onDismiss={() => setShowNewAnnualPlan(false)} />}
+        
       <MsgBox
         isOpen={showCompletionBox}
         onDismiss={() => setShowCompletionBox(false)}

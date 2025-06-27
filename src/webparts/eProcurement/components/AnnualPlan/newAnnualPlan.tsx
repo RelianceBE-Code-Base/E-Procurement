@@ -1,64 +1,32 @@
 import * as React from 'react';
 import { useState } from "react";
-import {
-  PrimaryButton,
-  DefaultButton,
-} from '@fluentui/react/lib/Button';
-
-import { TextField } from '@fluentui/react/lib/TextField';
-import { Label } from '@fluentui/react/lib/Label';
-// import {
-//   Dropdown,
-//   IDropdownOption,
-// } from '@fluentui/react/lib/Dropdown';
-import { Pivot, PivotItem } from '@fluentui/react/lib/Pivot';
-//import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
-// import {
-//   Icon
-// } from '@fluentui/react/lib/Icon';
-import { mergeStyles } from '@fluentui/react/lib/Styling';
-import { initializeIcons, Modal, Stack } from '@fluentui/react';
+import { initializeIcons } from '@fluentui/react';
+import { FileText, Save, X, CircleX } from 'lucide-react';
+import MsgBox from '../../Modals/msgBox';
 
 // Initialize Fluent UI icons
 initializeIcons();
 
 interface NewAnnualPlanProps {
-    isOpen: boolean;
-    onSubmit?: (data: any) => void;
-    onDismiss?: () => void;
+  isOpen: boolean;
+  onSubmit?: (data: any) => void;
+  onDismiss?: () => void;
 }
-  
-  const containerStyle = mergeStyles({
-    width: '100%',
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
-    backgroundColor: '#ffffff',
-    boxShadow: '0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108)',
-    borderRadius: '4px',
-  });
 
-  const modalContentStyles = mergeStyles({
-    width: '700px',
-    padding: '20px',
-    backgroundColor: '#ffffff',
-    borderRadius: '4px',
-  });
+
 
 const NewAnnualPlan = ({
-    isOpen,
-    onSubmit = () => {},
-    onDismiss = () => {},
+  onSubmit = () => { },
+  onDismiss = () => { },
 }: NewAnnualPlanProps) => {
-  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
   });
   const [validationError, setValidationError] = useState<string | null>(null);
   const [successful, setSuccessful] = useState(false);
-  const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
+  const [referenceNumber, setReferenceNumber] = useState<string>("");
 
 
   const handleChange = (field: string, value: any) => {
@@ -70,16 +38,15 @@ const NewAnnualPlan = ({
 
   const validateCurrentStep = () => {
 
-        if (!formData.title || !formData.description) {
-          setValidationError("Please fill in all required fields");
-          return false;
-        }
+    if (!formData.title || !formData.description) {
+      setValidationError("Please fill in all required fields");
+      return false;
+    }
 
     return true;
   };
 
   const resetForm = () => {
-    setCurrentStep(1);
     setFormData({
       title: "",
       description: "",
@@ -91,106 +58,101 @@ const NewAnnualPlan = ({
 
   const handleSubmit = () => {
     if (validateCurrentStep()) {
-
-        setSuccessful(true)
-        onSubmit(formData);
-        setReferenceNumber("REQ-2025-005")
-      } 
-        setCurrentStep(1)
+      setSuccessful(true)
+      onSubmit(formData);
+      setReferenceNumber("REQ-2025-005")
+    }
 
   };
 
 
   return (
-    <Modal
-    isOpen={isOpen}
-    onDismiss={() => {
-      resetForm();
-      onDismiss();
-    }}
-    isBlocking={false}
-    containerClassName={modalContentStyles}
-  >
-    <div className={containerStyle}>
-    <Stack tokens={{ childrenGap: 16 }}>
-    {!successful && <div>
-      <Stack>
-        <h2 style={{ margin: 0 }}>Initiate Annual Planning</h2>
-        <p style={{ marginTop: '8px', color: '#605e5c' }}>
-          Complete the form to initiate a new annual plan request. All fields
-          marked with * are required.
-        </p>
-  
-      </Stack>
+    <>
+      {!successful &&
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Initiate Annual Planning</h2>
+              <button onClick={() => {
+                resetForm();
+                onDismiss();
+              }} className="text-gray-500 hover:text-gray-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-      {validationError && (
-          <MessageBar messageBarType={MessageBarType.error} styles={{ root: { marginBottom: '16px' } }}>
-            {validationError}
-          </MessageBar>
-        )}
+            {validationError && (
+              <MessageBar messageBarType={MessageBarType.error} styles={{ root: { marginBottom: '16px' } }}>
+                {validationError}
+              </MessageBar>
+            )}
 
-        <Pivot selectedKey={`step-${currentStep}`} styles={{ root: { width: '100%' } }}>
+            {/* Tab content */}
+            <div className="mb-6">
+              <div className="space-y-4">
+                <h6 className="text-sm text-gray-600 flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Complete the form to initiate a new annual plan request. All fields
+                  marked with * are required.
+                </h6>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Request Title
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.title}
+                      onChange={(e) => handleChange("title", e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter a descriptive title for your reques"
+                    />
 
-          <PivotItem itemKey="step-1" headerText="">
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Business Justification
+                    </label>
+                    <textarea
+                      rows={5}
+                      value={formData.description}
+                      onChange={(e) => handleChange("description", e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Explain why this annual plan is necessary"
+                    />
 
-              <div style={{ display: 'grid', gap: '16px' }}>
-                <div>
-                  <Label required>Request Title</Label>
-                  <TextField
-                    placeholder="Enter a descriptive title for your request"
-                    value={formData.title}
-                    onChange={(e, value) => handleChange("title", value)}
-                  />
-                </div>
-
-                <div>
-                  <Label required>Business Justification</Label>
-                  <TextField
-                    placeholder="Explain why this annual plan is necessary"
-                    multiline
-                    rows={5}
-                    value={formData.description}
-                    onChange={(e, value) => handleChange("description", value)}
-                  />
+                  </div>
                 </div>
               </div>
+            </div>
 
-          </PivotItem>
+            {/* Navigation and action buttons */}
+            <div className="flex justify-end">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { resetForm(); onDismiss(); setSuccessful(false) }}
 
-        </Pivot>
-    </div>}
-    {successful && (
-        <MessageBar
-            messageBarType={MessageBarType.success}
-            styles={{ root: { marginBottom: '16px' } }}
-            isMultiline={true}
-        >
-            <strong>Submitted Successfully!</strong><br /><br />
-            Email notifications have been successfully sent to all departments.<br /><br />
-            Reference Number: <strong>{referenceNumber}</strong><br />
-            <br />
-            Departments are expected to respond with their projected procurement needs as part of the annual planning process.
-
-        </MessageBar>
-        )}
-
-      <Stack horizontal horizontalAlign="space-between">
-          <DefaultButton
-            onClick={() => { resetForm(); onDismiss(); setSuccessful(false) }}
-            text={successful ? "Close" : "Cancel"}
-            iconProps={ { iconName: 'circle-x' }}
-          />
-
-          <PrimaryButton
-            onClick={handleSubmit}
-            text={"Submit Request"}
-            iconProps={ { iconName: 'send-horizontal' }}
-            disabled={successful}
-          />
-      </Stack>
-    </Stack>
-    </div>
-    </Modal>
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <CircleX className="w-4 h-4" />
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                >
+                  <Save className="w-4 h-4" />
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      {successful &&
+        <MsgBox isOpen={successful} onDismiss={() => { onDismiss(); setSuccessful(false) }} action={'Submitted Successfully'} referenceNumber={referenceNumber} message='Email notifications have been successfully sent to all departments.' description='Departments are expected to respond with their projected procurement needs as part of the annual planning process.' />
+      }
+    </>
   );
 };
 

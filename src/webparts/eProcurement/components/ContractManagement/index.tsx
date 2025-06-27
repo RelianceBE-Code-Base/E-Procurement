@@ -1,4 +1,4 @@
-import { Eye, Filter, Plus } from 'lucide-react';
+import { Eye, Filter } from 'lucide-react';
 import * as React from 'react';
 import { useState } from 'react';
 import MsgBox from '../../Modals/msgBox';
@@ -15,9 +15,9 @@ const ContractManagement: React.FC<IContractManagement> = ({ sampleRequests }) =
   const [referenceNumber, setReferenceNumber] = useState<string>("");
   const [message, setMessage] = useState<string>(``);
 
-  const openNewContract = () => {
-    setShowNewContract(true)
-  }
+  // const openNewContract = () => {
+  //   setShowNewContract(true)
+  // }
 
   const openCompletionBox = (item: any) => {
     setMessage(`An Award Letter has been issued to the winning vendor/contractor`)
@@ -34,10 +34,10 @@ const ContractManagement: React.FC<IContractManagement> = ({ sampleRequests }) =
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">Contract Requests</h3>
             <div className="flex gap-2">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewContract}>
+              {/* <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewContract}>
                 <Plus className="w-4 h-4" />
                 New Request
-              </button>
+              </button> */}
               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
                 <Filter className="w-4 h-4" />
                 Filter

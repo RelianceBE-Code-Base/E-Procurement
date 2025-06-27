@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
-import { Project, Milestone } from './ProjectMonitoring';
+import { Project, Milestone } from '.';
 import styles from '../EProcurement.module.scss';
 
 interface ProjectFormProps {

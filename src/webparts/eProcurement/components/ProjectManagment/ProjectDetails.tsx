@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { ArrowLeft, CheckCircle, Clock, AlertCircle, FileText, Upload, Plus } from 'lucide-react';
-import { Project, Milestone, formatCurrency } from './ProjectMonitoring';
+import { Project, Milestone, formatCurrency } from '.';
 import styles from '../EProcurement.module.scss';
 
 interface ProjectDetailsProps {

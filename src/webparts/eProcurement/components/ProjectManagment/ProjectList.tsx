@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import { Eye, Plus, Filter } from 'lucide-react';
-import { Project, formatCurrency } from './ProjectMonitoring';
+import { Project, formatCurrency } from './index';
 
 interface ProjectListProps {
     projects: Project[];
@@ -19,15 +19,6 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onProjectSelect, ha
             default: return 'bg-gray-100 text-gray-800 border-gray-200';
         }
     };
-
-    // const getPaymentStatusColor = (status: string) => {
-    //     switch (status) {
-    //         case 'completed': return 'bg-green-100 text-green-800 border-green-200';
-    //         case 'partial': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    //         case 'pending': return 'bg-red-100 text-red-800 border-red-200';
-    //         default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    //     }
-    // };
 
     // const formatDate = (dateString: string) => {
     //     return new Date(dateString).toLocaleDateString('en-US', {
@@ -70,10 +61,6 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onProjectSelect, ha
                             {/* <th className="text-left py-3 px-4">Milestones</th> */}
                             <th className="text-left py-3 px-4">Status</th>
                             <th className="text-left py-3 px-4">Progress</th>
-                            {/* <th className="text-left py-3 px-4">Payment Status</th> */}
-                            {/* <th className="text-left py-3 px-4">Start Date</th>
-                            <th className="text-left py-3 px-4">End Date</th>
-                            <th className="text-left py-3 px-4">Monitoring Officer</th> */}
                             <th className="text-left py-3 px-4">Actions</th>
                         </tr>
                     </thead>
@@ -103,14 +90,6 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onProjectSelect, ha
                                             <span className="text-xs text-gray-500 mt-1">{project.progress}%</span>
                                         </div>
                                     </td>
-                                    {/* <td className="px-4 py-3">
-                                        <Badge className={getPaymentStatusColor(project.paymentStatus)}>
-                                            {project.paymentStatus}
-                                        </Badge>
-                                    </td> */}
-                                    {/* <td className="px-4 py-3">{formatDate(project.startDate)}</td>
-                                    <td className="px-4 py-3">{formatDate(project.endDate)}</td>
-                                    <td className="px-4 py-3">{project.assignedOfficer}</td> */}
                                     <td className="px-4 py-3">
                                         <IconButton onClick={() => onProjectSelect(project)}>
                                             <Eye className="h-4 w-4" />
@@ -127,36 +106,6 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, onProjectSelect, ha
 };
 
 // Helper Components
-// const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-//     <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
-//         {children}
-//     </div>
-// );
-
-// const CardHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-//     <div className="px-6 py-4 border-b border-gray-200">
-//         {children}
-//     </div>
-// );
-
-// const CardTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-//     <h3 className="text-lg font-semibold text-gray-900">
-//         {children}
-//     </h3>
-// );
-
-// const CardContent: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-//     <div className={`px-6 py-4 ${className}`}>
-//         {children}
-//     </div>
-// );
-
-// const TableHead: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-//     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-//         {children}
-//     </th>
-// );
-
 const Badge: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${className}`}>
         {children}

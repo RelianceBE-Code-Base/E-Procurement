@@ -1,182 +1,338 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-    Eye,
-    Filter,
-    MoreVertical,
-    CheckCircle,
-    ScrollText,
-    Wallet
-} from 'lucide-react';
-import MsgBox from '../../Modals/msgBox';
+// import { BarChart3, Plus } from 'lucide-react';
+import ProjectList from './ProjectList';
+import ProjectDetails from './ProjectDetails';
+import ProjectForm from './ProjectForm';
 
-interface IProjectManagement {
-    sampleRequests: any
+export interface Milestone {
+    id: string;
+    title: string;
+    description: string;
+    dueDate: string;
+    status: 'not-started' | 'in-progress' | 'completed' | 'delayed';
+    completedDate?: string;
 }
 
-const ProjectManagement: React.FC<IProjectManagement> = ({ sampleRequests }) => {
-    const [showCompletionBox, setShowCompletionBox] = useState(false)
-    const [referenceNumber, setReferenceNumber] = useState<string>("");
-    const [message, setMessage] = useState<string>(``);
-    const [action, setAction] = useState<string>(``);
-    const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+export interface Project {
+    id: string;
+    title: string;
+    projectId: string;
+    contractId: string;
+    contractor: string;
+    status: 'not-started' | 'in-progress' | 'completed' | 'delayed';
+    startDate: string;
+    endDate: string;
+    assignedOfficer: string;
+    milestones: Milestone[];
+    notes: string[];
+    files: { name: string; url: string; uploadedDate: string }[];
+    progress: number;
+    contractValue: number;  // Value of the contract awarded
+}
 
-    const openCompletionBox = (item: any) => {
-        let message;
-        let action;
-        console.log(item.projectStatus)
-        switch (item.projectStatus) {
-            case "Completed":
-                message = `The project deliverables have been successfully verified
-                
-                `;
-                action = "Deliverables Verification Successful";
-                break;
-            case "Verified":
-                message = `The Job Completion Certificate has been successfully issued to the contractor
-                
-                `;
-                action = "Certificate Isuance Successful";
-                break;
-            case "Certificate Issued":
-                message = `The payment process has been successfully initiated
-                
-                `;
-                action = "Payment Initiation Successful";
-                break;
-            default:
-                message = `The payment process has been successfully completed
-                
-                `;
-                action = "Payment Successful";
+export const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount);
+};
+
+const ProjectManagement: React.FC = () => {
+    const [activeView, setActiveView] = useState<'list' | 'details' | 'form'>('list');
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [userRole] = useState<'admin' | 'officer' | 'manager'>('officer');
+
+    // Mock projects data - representing projects awarded to external contractors
+    const [projects, setProjects] = useState<Project[]>([
+        {
+            id: '1',
+            title: 'Government Office Building Renovation',
+            projectId: 'PROJ-2024-001',
+            contractId: 'CONT-2024-004',
+            contractor: 'ABC Construction Ltd',
+            status: 'in-progress',
+            startDate: '2024-01-15',
+            endDate: '2024-06-15',
+            assignedOfficer: 'John Smith',
+            progress: 40,
+            contractValue: 2500000,
+            milestones: [
+                { id: '1', title: 'Project Mobilization', description: 'Contractor team setup and site preparation', dueDate: '2024-01-30', status: 'completed', completedDate: '2024-01-28' },
+                { id: '2', title: 'Demolition Phase', description: 'Removal of old fixtures and structures', dueDate: '2024-02-15', status: 'completed', completedDate: '2024-02-12' },
+                { id: '3', title: 'Structural Work', description: 'Foundation and structural improvements', dueDate: '2024-03-30', status: 'in-progress' },
+                { id: '4', title: 'Electrical & Plumbing', description: 'Installation of utilities', dueDate: '2024-05-15', status: 'not-started' },
+                { id: '5', title: 'Final Inspection & Handover', description: 'Quality check and project completion', dueDate: '2024-06-15', status: 'not-started' }
+            ],
+            notes: [
+                'Contractor requested extension due to material delays - approved for 2 weeks',
+                'Monthly progress meeting scheduled for first Friday of each month',
+                'Environmental compliance verified by site inspector'
+            ],
+            files: [
+                { name: 'Signed_Contract.pdf', url: '#', uploadedDate: '2024-01-15' },
+                { name: 'Progress_Report_Feb.pdf', url: '#', uploadedDate: '2024-02-28' },
+                { name: 'Environmental_Clearance.pdf', url: '#', uploadedDate: '2024-01-20' }
+            ]
+        },
+        {
+            id: '2',
+            title: 'IT Infrastructure Modernization',
+            projectId: 'PROJ-2024-002',
+            contractId: 'CONT-2024-005',
+            contractor: 'TechCorp Solutions Inc',
+            status: 'delayed',
+            startDate: '2024-02-01',
+            endDate: '2024-05-31',
+            assignedOfficer: 'Sarah Johnson',
+            progress: 25,
+            contractValue: 1800000,
+            milestones: [
+                { id: '1', title: 'Network Assessment', description: 'Current infrastructure evaluation', dueDate: '2024-02-15', status: 'completed', completedDate: '2024-02-10' },
+                { id: '2', title: 'Equipment Procurement', description: 'Hardware and software acquisition', dueDate: '2024-03-01', status: 'delayed' },
+                { id: '3', title: 'System Installation', description: 'Network setup and configuration', dueDate: '2024-04-15', status: 'not-started' },
+                { id: '4', title: 'Testing & Validation', description: 'System testing and user acceptance', dueDate: '2024-05-15', status: 'not-started' }
+            ],
+            notes: [
+                'Contractor experiencing supply chain delays for specialized equipment',
+                'Weekly status calls established to monitor progress',
+                'Penalty clause activated due to milestone delays'
+            ],
+            files: [
+                { name: 'Contract_Amendment_1.pdf', url: '#', uploadedDate: '2024-03-15' },
+                { name: 'Network_Assessment_Report.pdf', url: '#', uploadedDate: '2024-02-12' }
+            ]
+        },
+        {
+            id: '3',
+            title: 'Office Furniture Procurement',
+            projectId: 'PROJ-2023-003',
+            contractId: 'CONT-2023-006',
+            contractor: 'Elegance Interiors Ltd.',
+            status: 'completed',
+            startDate: '2023-03-20',
+            endDate: '2023-05-25',
+            assignedOfficer: 'Sarah Williams',
+            progress: 100,
+            contractValue: 2500000,
+            milestones: [
+                { id: '1', title: 'Furniture Design Approval', description: 'Designs submitted and approved', dueDate: '2023-04-01', status: 'completed', completedDate: '2023-03-28' },
+                { id: '2', title: 'Delivery', description: 'Furniture delivered to office', dueDate: '2023-05-10', status: 'completed', completedDate: '2023-05-08' },
+                { id: '3', title: 'Installation & Setup', description: 'Furniture setup across departments', dueDate: '2023-05-20', status: 'completed', completedDate: '2023-05-18' }
+            ],
+            notes: [
+                'Procurement completed without incident',
+                'Final inspection signed off by Admin department'
+            ],
+            files: [
+                { name: 'Furniture_Delivery_Slip.pdf', url: '#', uploadedDate: '2023-05-08' },
+                { name: 'Final_Inspection_Report.pdf', url: '#', uploadedDate: '2023-05-20' }
+            ]
+        },
+        {
+            id: '4',
+            title: 'Generator Replacement',
+            projectId: 'PROJ-2024-004',
+            contractId: 'CONT-2024-008',
+            contractor: 'PowerHub Engineering',
+            status: 'in-progress',
+            startDate: '2024-01-10',
+            endDate: '2024-03-10',
+            assignedOfficer: 'James Wilson',
+            progress: 85,
+            contractValue: 6750000,
+            milestones: [
+                { id: '1', title: 'Old Generator Removal', description: 'Dismantling and clearing', dueDate: '2024-01-20', status: 'completed', completedDate: '2024-01-19' },
+                { id: '2', title: 'New Generator Installation', description: 'Installation of 150KVA unit', dueDate: '2024-02-15', status: 'completed', completedDate: '2024-02-12' },
+                { id: '3', title: 'Testing & Certification', description: 'Operational testing and safety checks', dueDate: '2024-03-10', status: 'in-progress' }
+            ],
+            notes: [
+                'Certification stage pending external inspection',
+                'Power capacity increased to meet peak demands'
+            ],
+            files: [
+                { name: 'Installation_Report.pdf', url: '#', uploadedDate: '2024-02-12' }
+            ]
+        },
+        {
+            id: '5',
+            title: 'Training for New Recruits',
+            projectId: 'PROJ-2024-005',
+            contractId: 'CONT-2024-009',
+            contractor: 'GrowthEdge Academy',
+            status: 'completed',
+            startDate: '2024-01-15',
+            endDate: '2024-02-28',
+            assignedOfficer: 'Emily Davis',
+            progress: 100,
+            contractValue: 1200000,
+            milestones: [
+                { id: '1', title: 'Curriculum Development', description: 'Customize training modules', dueDate: '2024-01-25', status: 'completed', completedDate: '2024-01-24' },
+                { id: '2', title: 'Training Sessions', description: 'Week-long onboarding program', dueDate: '2024-02-20', status: 'completed', completedDate: '2024-02-19' }
+            ],
+            notes: [
+                'Sessions held across two locations',
+                'Feedback from trainees overwhelmingly positive'
+            ],
+            files: [
+                { name: 'Training_Certificates.pdf', url: '#', uploadedDate: '2024-02-28' }
+            ]
+        },
+        {
+            id: '6',
+            title: 'Cloud Storage Subscription',
+            projectId: 'PROJ-2024-006',
+            contractId: 'CONT-2024-010',
+            contractor: 'CloudByte Ltd.',
+            status: 'delayed',
+            startDate: '2024-01-20',
+            endDate: '2024-03-01',
+            assignedOfficer: 'Daniel Miller',
+            progress: 90,
+            contractValue: 3000000,
+            milestones: [
+                { id: '1', title: 'Vendor Setup', description: 'Cloud environment provisioned', dueDate: '2024-02-01', status: 'completed', completedDate: '2024-01-30' },
+                { id: '2', title: 'Migration & Testing', description: 'Move of critical documents to cloud', dueDate: '2024-02-20', status: 'completed', completedDate: '2024-02-18' },
+                { id: '3', title: 'Access Rollout', description: 'Assign roles and monitor access', dueDate: '2024-03-01', status: 'in-progress' }
+            ],
+            notes: [
+                'System security reviewed by ICT team',
+                'Onboarding training held for all users'
+            ],
+            files: [
+                { name: 'Cloud_Usage_Policy.pdf', url: '#', uploadedDate: '2024-01-25' }
+            ]
+        },
+        {
+            id: '8',
+            title: 'Fleet Expansion',
+            projectId: 'PROJ-2024-008',
+            contractId: 'CONT-2024-012',
+            contractor: 'AutoEdge Motors',
+            status: 'completed',
+            startDate: '2024-01-28',
+            endDate: '2024-03-10',
+            assignedOfficer: 'Michael Anderson',
+            progress: 100,
+            contractValue: 22000000,
+            milestones: [
+                { id: '1', title: 'Vehicle Procurement', description: 'Order and receive vehicles', dueDate: '2024-02-15', status: 'completed', completedDate: '2024-02-14' },
+                { id: '2', title: 'Inspection & Registration', description: 'Verify and register with FRSC', dueDate: '2024-03-01', status: 'completed', completedDate: '2024-02-28' }
+            ],
+            notes: [
+                'Vehicles already deployed for field use',
+                'Insurance certificates uploaded to fleet portal'
+            ],
+            files: [
+                { name: 'Vehicle_Inspection_Report.pdf', url: '#', uploadedDate: '2024-03-01' }
+            ]
+        },
+        {
+            id: '9',
+            title: 'ERP License Renewal',
+            projectId: 'PROJ-2025-009',
+            contractId: 'CONT-2025-001',
+            contractor: 'Enterprise Systems NG',
+            status: 'in-progress',
+            startDate: '2025-01-10',
+            endDate: '2025-02-25',
+            assignedOfficer: 'Jennifer Thomas',
+            progress: 50,
+            contractValue: 9000000,
+            milestones: [
+                { id: '1', title: 'License Validation', description: 'Renew keys and support agreement', dueDate: '2025-01-25', status: 'completed', completedDate: '2025-01-23' },
+                { id: '2', title: 'System Integration', description: 'Apply license to core systems', dueDate: '2025-02-15', status: 'in-progress' }
+            ],
+            notes: [
+                'Renewal includes SLA extension for 3 years'
+            ],
+            files: [
+                { name: 'ERP_Renewal_Agreement.pdf', url: '#', uploadedDate: '2025-01-20' }
+            ]
+        },
+        {
+            id: '10',
+            title: 'Medical Supplies Procurement',
+            projectId: 'PROJ-2025-010',
+            contractId: 'CONT-2025-002',
+            contractor: 'HealthMart Logistics',
+            status: 'completed',
+            startDate: '2025-01-10',
+            endDate: '2025-02-15',
+            assignedOfficer: 'Christopher Martinez',
+            progress: 100,
+            contractValue: 4300000,
+            milestones: [
+                { id: '1', title: 'Supply Chain Finalization', description: 'Confirm suppliers and delivery dates', dueDate: '2025-01-20', status: 'completed', completedDate: '2025-01-18' },
+                { id: '2', title: 'Distribution to Units', description: 'Distribute to all clinics', dueDate: '2025-02-10', status: 'completed', completedDate: '2025-02-08' }
+            ],
+            notes: [
+                'Project closed with zero discrepancy',
+                'All items logged in asset management system'
+            ],
+            files: [
+                { name: 'Delivery_Receipts.pdf', url: '#', uploadedDate: '2025-02-08' }
+            ]
+        }
+    ]);
+
+    const handleProjectSelect = (project: Project) => {
+        setSelectedProject(project);
+        setActiveView('details');
+    };
+
+    const handleProjectUpdate = (updatedProject: Project) => {
+        setProjects(prev => prev.map(p => p.id === updatedProject.id ? updatedProject : p));
+        setSelectedProject(updatedProject);
+    };
+
+    const handleNewProject = () => {
+        setSelectedProject(null);
+        setActiveView('form');
+    };
+
+    const handleProjectCreate = (newProject: Omit<Project, 'id'>) => {
+        const project: Project = {
+            ...newProject,
+            id: Date.now().toString()
         };
-        setAction(action);
-        setMessage(message)
-        setShowCompletionBox(true)
-        setReferenceNumber(item.id)
-    }
+        setProjects(prev => [...prev, project]);
+        setActiveView('list');
+    };
 
     return (
         <main className="flex-1 p-6 overflow-auto">
             <div className="space-y-6">
+                {activeView === 'list' && (
+                    <>
+                        <ProjectList
+                            projects={projects}
+                            onProjectSelect={handleProjectSelect}
+                            handleNewProject={handleNewProject}
+                        />
+                    </>
+                )}
 
-                {/* Recent Requests Table */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold">Project Completion and Payment Processing</h3>
-                        <div className="flex gap-2">
-                            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                                <Filter className="w-4 h-4" />
-                                Filter
-                            </button>
-                        </div>
-                    </div>
+                {activeView === 'details' && selectedProject && (
+                    <ProjectDetails
+                        project={selectedProject}
+                        onBack={() => setActiveView('list')}
+                        onUpdate={handleProjectUpdate}
+                        userRole={userRole}
+                    />
+                )}
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="border-b">
-                                    <th className="text-left py-3 px-4">Request ID</th>
-                                    <th className="text-left py-3 px-4">Title</th>
-                                    <th className="text-left py-3 px-4">Contractor</th>
-                                    <th className="text-left py-3 px-4">Project Stage</th>
-                                    <th className="text-left py-3 px-4">Priority</th>
-                                    <th className="text-left py-3 px-4">Amount</th>
-                                    <th className="text-left py-3 px-4">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sampleRequests.map((request: any) => (
-                                    <tr key={request.id} className="border-b hover:bg-gray-50">
-                                        <td className="py-3 px-4 font-mono text-sm">{request.id}</td>
-                                        <td className="py-3 px-4">{request.title}</td>
-                                        <td className="py-3 px-4">{request.contractor}</td>
-                                        <td className="py-3 px-4">
-                                            <span className={`px-2 py-1 rounded-full text-xs ${request.projectStatus === 'Completed' ? 'bg-green-100 text-green-800' :
-                                                request.projectStatus === 'Verified' ? 'bg-blue-100 text-blue-800' :
-                                                    request.projectStatus === 'Certificate Issued' ? 'bg-gray-100 text-gray-800' :
-                                                        'bg-red-100 text-red-800'
-                                                }`}>
-                                                {request.projectStatus}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <span className={`px-2 py-1 rounded text-xs ${request.priority === 'High' ? 'bg-red-100 text-red-800' :
-                                                request.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                                                    'bg-gray-100 text-gray-800'
-                                                }`}>
-                                                {request.priority}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-4 font-semibold">{request.amount}</td>
-                                        <td className="py-3 px-4">
-                                            <div className="flex gap-2">
-                                                <button className="p-1 text-blue-600 hover:bg-blue-100 rounded">
-                                                    <Eye className="w-4 h-4" />
-                                                </button>
-
-                                                {request.projectStatus !== "Payment Initiated" && (
-                                                    <div className="relative">
-                                                        <button
-                                                            onClick={() =>
-                                                                setOpenMenuId((prevId) => (prevId === request.id ? null : request.id))
-                                                            }
-                                                            className="p-1 text-gray-600 hover:bg-gray-100 rounded"
-                                                        >
-                                                            <MoreVertical className="w-5 h-5" />
-                                                        </button>
-
-                                                        {openMenuId === request.id && (
-                                                            <div className="absolute right-0 z-10 mt-2 w-56 bg-white border border-gray-200 rounded shadow-lg">
-                                                                <button
-                                                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center gap-2"
-                                                                    onClick={() => {
-                                                                        openCompletionBox(request);
-                                                                        setOpenMenuId(null);
-                                                                    }}
-                                                                >
-                                                                    {request.projectStatus === 'Completed' && (
-                                                                        <>
-                                                                            <CheckCircle className="w-4 h-4 text-green-600" />
-                                                                            Verify Deliverables
-                                                                        </>
-                                                                    )}
-                                                                    {request.projectStatus === 'Verified' && (
-                                                                        <>
-                                                                            <ScrollText className="w-4 h-4 text-blue-600" />
-                                                                            Issue Certificate
-                                                                        </>
-                                                                    )}
-                                                                    {request.projectStatus === 'Certificate Issued' && (
-                                                                        <>
-                                                                            <Wallet className="w-4 h-4 text-purple-600" />
-                                                                            Initiate Payment
-                                                                        </>
-                                                                    )}
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                {activeView === 'form' && (
+                    <ProjectForm
+                        onBack={() => setActiveView('list')}
+                        onSubmit={handleProjectCreate}
+                    />
+                )}
             </div>
-
-            <MsgBox
-                isOpen={showCompletionBox}
-                onDismiss={() => setShowCompletionBox(false)}
-                referenceNumber={referenceNumber}
-                message={message}
-                action={action}
-            />
         </main>
-    )
+    );
 };
 
 export default ProjectManagement;

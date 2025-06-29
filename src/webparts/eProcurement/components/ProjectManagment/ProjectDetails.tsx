@@ -116,7 +116,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onBack, onUpda
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" onClick={onBack}>
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Projects
+                        Back
                     </Button>
                     <h1 className="text-2xl font-bold">{project.title}</h1>
                 </div>

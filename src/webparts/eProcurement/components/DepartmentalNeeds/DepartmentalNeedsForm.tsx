@@ -1,33 +1,20 @@
 import * as React from "react";
 import { useState } from "react";
 import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  Pivot,
-  PivotItem,
-  Stack,
-  TextField,
-  Dropdown,
-  IDropdownOption,
-  MessageBar,
-  MessageBarType,
-  ProgressIndicator,
+  IDropdownOption
 } from "@fluentui/react";
 import ProcurementItemsFluent8, { ProcurementItem } from "./AddItem";
-import { X, ChevronLeft, Save, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, Save, ChevronRight, AlertCircle } from "lucide-react";
 
 const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isOpen: boolean; onDismiss: () => void, openCompletionBox: (item: any) => void }) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     templateType: "",
     title: "",
     department: "",
     description: "",
     justification: "",
-    estimatedCost: "",
+    estimatedCost: 0,
     planReference: "",
   });
   const [items, setItems] = useState<ProcurementItem[]>([]);
@@ -41,8 +28,11 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
     // justification: "",
     // priority: "medium",
   });
-  const [error, setError] = useState<string | null>(null);
+  //const [error, setError] = useState<string | null>(null);
   const [estimatedTotalCost, setEstimatedTotalCost] = useState<number>(0);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const totalSteps = 3;
+  const progress = (currentStep / totalSteps) * 100;
 
   const templateOptions: IDropdownOption[] = [
     { key: "goods", text: "Procurement of Goods" },
@@ -60,156 +50,238 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
   ];
 
   const tabs = [
-    { id: 'assign_tender_id', title: 'Basic Info' },
-    { id: 'prepare_sbd', title: 'Request Details' },
-    { id: 'distribute_sbd', title: 'Items' },
+    { id: '1', title: 'Basic Info' },
+    { id: '2', title: 'Request Details' },
+    { id: '3', title: 'Items' },
   ];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
-    setError(null);
+    //setError(null);
+    if (validationError) setValidationError(null);
   };
 
   const addItem = () => {
     if (!newItem.title || !newItem.description) return;
 
-    setItems([
+    const updatedItems = [
       ...items,
       {
         id: newItem.id,
         title: newItem.title!,
         quantity: newItem.quantity || 1,
         estimatedCost: newItem.estimatedCost || 0,
-        // estimatedTotalCost: newItem.estimatedTotalCost || 0,
         description: newItem.description!,
-        // justification: newItem.justification || "",
-        // priority: newItem.priority || "medium",
       },
-    ]);
+    ];
 
-    const nextId = newItem.id + 1;
-    setNewItem({ id: nextId, title: "", quantity: 0, estimatedCost: 0, description: "" });
 
-    const totalCost = items.reduce((sum, item) => sum + item.quantity * item.estimatedCost, 0);
+  setItems(updatedItems);
+
+  // Reset the new item form
+  const nextId = newItem.id + 1;
+  setNewItem({ id: nextId, title: "", quantity: 0, estimatedCost: 0, description: "" });
+
+  // Calculate total from updatedItems, not stale `items`
+  const totalCost = updatedItems.reduce(
+    (sum, item) => sum + (Number(item.quantity) * Number(item.estimatedCost)),
+    0
+  );
     setEstimatedTotalCost(totalCost);
+
+    if (validationError) setValidationError(null);
   };
+
 
   const removeItem = (id: number) => {
     setItems(items.filter((item) => item.id !== id));
   };
 
-  const handleSubmit = () => {
-    // Dummy check
-    if (!formData.templateType || !formData.title) {
-      setError("Please complete required fields");
-      return;
+  const validateCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        if (!formData.templateType || !formData.title || !formData.department || !formData.planReference) {
+          setValidationError("Please fill in all required fields in this step");
+          return false;
+        }
+        break;
+      case 2:
+        if (!formData.description || !formData.justification) {
+          setValidationError("Please fill in all required fields in this step");
+          return false;
+        }
+        break;
+      case 3:
+        if (
+          estimatedTotalCost === 0
+        ) {
+          setValidationError("No procurement items added yet");
+          return false;
+        }
+        break;
     }
-    console.log("Form Data:", formData);
-    console.log("Items:", items);
-    onDismiss();
-    openCompletionBox("RQ-2025-005");
+    return true;
   };
+
+  const handleSubmit = () => {
+    if (validateCurrentStep()) {
+      // Simulate validation against annual procurement plan
+      if (Math.random() > 0.3) {
+        // 70% chance of success for demo purposes
+
+        //setTimeout(() => {
+          // Delay onDismiss and openCompletionBox
+          onDismiss();
+          openCompletionBox("RQ-2025-005");
+  
+        //}, 1500); // 1.5 seconds delay
+      } else {
+        setValidationError(
+          "Request does not match any item in the approved annual procurement plan",
+        );
+      }
+    }
+  };
+
+  const handleNext = () => {
+    if (validateCurrentStep()) {
+      setCurrentStep(currentStep + 1);
+    }
+  }
+
+  const renderTabContent = () => {
+    const currentTabId = tabs[currentStep-1].id;
+    switch (currentTabId) {
+      case '1':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              {/* <FileText className="w-5 h-5" />
+              {tabs[0].title} */}
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Template Type *
+                </label>
+                <select
+                  value={formData.templateType}
+                  onChange={(e) => handleInputChange("templateType", e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select template type</option>
+                  {templateOptions.map((itm: any, index: number) =>
+                    <option value={index}>{itm.text}</option>
+                  )}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange("title", e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter title"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Department *
+                </label>
+                <select
+                  value={formData.department}
+                  onChange={(e) => handleInputChange("department", e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select department</option>
+                  {departmentOptions.map((itm: any, index: number) =>
+                    <option value={index}>{itm.text}</option>
+                  )}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Annual Plan Reference *
+                </label>
+                <input
+                  type="text"
+                  value={formData.planReference}
+                  onChange={(e) => handleInputChange("planReference", e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter annual plan reference"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case '2':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              {/* <FileText className="w-5 h-5" /> */}
+              {/* {tabs[1].title} */}
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description *
+                </label>
+                <textarea
+                  rows={5}
+                  value={formData.description}
+                  onChange={(e) => handleInputChange("description", e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Justification *
+                </label>
+                <textarea
+                  rows={5}
+                  value={formData.justification}
+                  onChange={(e) => handleInputChange("justification", e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case '3':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              {/* <Send className="w-5 h-5" />
+              {tabs[2].title} */}
+            </h3>
+            <div className="space-y-4">
+              <ProcurementItemsFluent8
+                items={items}
+                newItem={newItem}
+                estimatedTotalCost={estimatedTotalCost}
+                setNewItem={setNewItem}
+                addItem={addItem}
+                removeItem={removeItem}
+              />
+            </div>
+            
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
 
   return (
     <>
-    <Dialog
-      hidden={!isOpen}
-      onDismiss={onDismiss}
-      dialogContentProps={{
-        type: DialogType.largeHeader,
-        title: "Create Procurement Request",
-        subText: "Complete all steps to submit your request",
-      }}
-      modalProps={{ isBlocking: false }}
-      minWidth={900}
-    >
-      <ProgressIndicator
-        label={`Step ${currentStep + 1} of 3`}
-        percentComplete={(currentStep + 1) / 3}
-      />
 
-      {error && (
-        <MessageBar messageBarType={MessageBarType.error}>{error}</MessageBar>
-      )}
-
-      <Pivot selectedKey={`step-${currentStep}`}>
-        <PivotItem headerText="Basic Info" itemKey="step-0">
-          <Stack tokens={{ childrenGap: 10 }}>
-            <Dropdown
-              label="Template Type"
-              selectedKey={formData.templateType}
-              options={templateOptions}
-              onChange={(_, option) => handleInputChange("templateType", option?.key as string)}
-            />
-            <TextField
-              label="Title"
-              value={formData.title}
-              onChange={(_, val) => handleInputChange("title", val || "")}
-            />
-            <Dropdown
-              label="Department"
-              selectedKey={formData.department}
-              options={departmentOptions}
-              onChange={(_, option) => handleInputChange("department", option?.key as string)}
-            />
-            <TextField
-              label="Annual Plan Reference"
-              value={formData.planReference}
-              onChange={(_, val) => handleInputChange("planReference", val || "")}
-            />
-          </Stack>
-        </PivotItem>
-
-        <PivotItem headerText="Request Details" itemKey="step-1">
-          <Stack tokens={{ childrenGap: 10 }}>
-            <TextField
-              label="Description"
-              multiline
-              rows={3}
-              value={formData.description}
-              onChange={(_, val) => handleInputChange("description", val || "")}
-            />
-            <TextField
-              label="Justification"
-              multiline
-              rows={3}
-              value={formData.justification}
-              onChange={(_, val) => handleInputChange("justification", val || "")}
-            />
-          </Stack>
-        </PivotItem>
-
-        <PivotItem headerText="Items" itemKey="step-2">
-          <ProcurementItemsFluent8
-            items={items}
-            newItem={newItem}
-            estimatedTotalCost={estimatedTotalCost}
-            setNewItem={setNewItem}
-            addItem={addItem}
-            removeItem={removeItem}
-          />
-        </PivotItem>
-      </Pivot>
-
-      <DialogFooter>
-        <DefaultButton
-          text={currentStep === 0 ? "Cancel" : "Back"}
-          onClick={() => (currentStep === 0 ? onDismiss() : setCurrentStep(currentStep - 1))}
-        />
-        <PrimaryButton
-          text={currentStep === 2 ? "Submit" : "Next"}
-          onClick={() => {
-            if (currentStep === 2) {
-              handleSubmit();
-            } else {
-              setCurrentStep(currentStep + 1);
-            }
-          }}
-        />
-      </DialogFooter>
-    </Dialog>
-
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Create Procurement Request</h2>
@@ -217,36 +289,65 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
               <X className="w-5 h-5" />
             </button>
           </div>
+          <p className="text-sm text-gray-600 mb-4">
+            Complete the form to initiate a new procurement request. All fields
+            marked with * are required.
+          </p>
+          {/* Progress Bar */}
+          <div className="mt-4">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <div className="flex justify-between mt-1 text-sm text-gray-500">
+              <span>
+                Step {currentStep} of {totalSteps}
+              </span>
+              <span>{Math.round(progress)}% Complete</span>
+            </div>
+          </div>
 
           {/* Progress tabs */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex overflow-x-auto pb-2">
               {tabs.map((tab, index) => (
+                //console.log(tab +" "+ index);
                 <button
-                  key={tab.id}
-                  onClick={() => setCurrentStep(index)}
-                  className={`flex-shrink-0 px-4 py-2 border-b-2 font-medium text-sm ${currentStep === index
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                >
-                  {tab.title}
-                </button>
+                key={tab.id}
+                //onClick={() => setCurrentStep(index);}
+                className={`flex-shrink-0 px-4 py-2 border-b-2 font-medium text-sm ${currentStep === index+1
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+              >
+                {tab.title}
+              </button>
               ))}
             </div>
           </div>
+           {/* Validation Error Alert */}
+           {validationError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+                <div className="flex">
+                  <AlertCircle className="h-4 w-4 text-red-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <p className="text-sm text-red-800">{validationError}</p>
+                </div>
+              </div>
+            )}
 
           {/* Tab content */}
           <div className="mb-6">
-            {/* {renderTabContent()} */}
+            {renderTabContent()}
           </div>
 
           {/* Navigation and action buttons */}
           <div className="flex justify-between">
             <div>
-              {currentStep > 0 && (
+              {currentStep > 1 && (
                 <button
-                onClick={() => (currentStep === 0 ? onDismiss() : setCurrentStep(currentStep - 1))}
+                  onClick={() => (currentStep === 1 ? onDismiss() : setCurrentStep(currentStep - 1))}
                   className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -263,17 +364,18 @@ const MemoCreationFormFluent8 = ({ isOpen, onDismiss, openCompletionBox }: { isO
                 Save Progress
               </button>
               <button
-                        onClick={() => {
-                          if (currentStep === 2) {
-                            handleSubmit();
-                          } else {
-                            setCurrentStep(currentStep + 1);
-                          }
-                        }}
+                onClick={() => {
+                  if (currentStep === 3) {
+                    handleSubmit();
+                  } else {
+                    handleNext()
+                  }
+                }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
               >
-                {currentStep < tabs.length - 1 ? 'Next' : 'Submit'}
-                <ChevronRight className="w-4 h-4" />
+                {currentStep === 3 && <Save className="w-4 h-4" />}
+                {currentStep < 3 ? 'Next' : 'Submit'}
+                {currentStep < 3 && <ChevronRight className="w-4 h-4" />}
               </button>
             </div>
           </div>

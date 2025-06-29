@@ -90,7 +90,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ onBack, onSubmit }) => {
                 <div className="flex items-center gap-4">
                     <Button2 variant="ghost" onClick={onBack}>
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        Back to Projects
+                        Back
                     </Button2>
                     <h1 className="text-2xl font-bold">Register New Contract Project</h1>
                 </div>

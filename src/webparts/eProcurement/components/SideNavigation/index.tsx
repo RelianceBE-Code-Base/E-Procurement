@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Settings, HelpCircle, LogOut } from 'lucide-react';
 import styles from '../EProcurement.module.scss';
+import { useNavigate } from 'react-router';
 
 interface INavItem {
   id: string;
@@ -24,6 +25,12 @@ const SideNav: React.FC<ISideNav> = ({
   setActiveTab,
   sidenavItems
 }) => {
+
+  const navigate = useNavigate();
+
+  const navigateHome = () => {
+    navigate('/')
+  }
   return (
     <div className={`${styles.sideNavContainer} ${sidenavOpen ? styles.open : styles.closed}`}>
       <div className={styles.sideNavHeader}>
@@ -62,7 +69,7 @@ const SideNav: React.FC<ISideNav> = ({
               <HelpCircle className={styles.sideNavFooterIcon} />
               Help
             </button>
-            <button className={styles.sideNavFooterItem}>
+            <button className={styles.sideNavFooterItem} onClick={navigateHome}>
               <LogOut className={styles.sideNavFooterIcon} />
               Logout
             </button>

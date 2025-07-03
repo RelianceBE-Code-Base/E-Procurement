@@ -88,13 +88,25 @@ export default class EProcurementWebPart extends BaseClientSideWebPart<IEProcure
   }
 
   private _ensureDefaultChromeIsDisabled(): void {
-    const elements = ['#workbenchPageContent', '#SuiteNavWrapper', '.SPCanvas-canvas', '.CanvasZone', '.ms-CommandBar', '#spSiteHeader', '.commandBarWrapper'];
-    elements.forEach(selector => {
+    //'.SuiteNavWrapper','#spSiteHeader','.sp-appBar','#sp-appBar','#workbenchPageContent', '.SPCanvas-canvas', '.CanvasZone', '.ms-CommandBar', '#spSiteHeader', '.commandBarWrapper'
+    const displayElements = ['#SuiteNavWrapper','#spSiteHeader','.sp-appBar','.ms-CommandBar','.commandBarWrapper', '#spCommandBar', '.ms-SPLegacyFabric', '.ms-footer', '.sp-pageLayout-footer', '.ms-workbenchFooter'];
+    const widthElements = ["#workbenchPageContent",'.CanvasZone','.SPCanvas-canvas'];
+    displayElements.forEach(selector => {
       document.querySelectorAll(selector).forEach(element => {
-        (element as HTMLElement).style.display = 'none !important';
+        (element as HTMLElement).style.display = 'none';
+      });
+    });
+
+    widthElements.forEach(selector => {
+      document.querySelectorAll(selector).forEach(element => {
         (element as HTMLElement).style.maxWidth = 'none';
       });
     });
+
+    document.querySelector<HTMLElement>('#spCommandBar')?.style.setProperty('min-height', '0', 'important');
+    
+
+
 
     // Check if the device is mobile and apply mobile-specific styles
     if (this._isMobileDevice()) {

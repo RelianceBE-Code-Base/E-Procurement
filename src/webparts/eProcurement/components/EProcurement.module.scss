@@ -292,6 +292,16 @@ $box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.132), 0 0.3px 0.9px rgba(0, 0, 0, 0.1
     font-weight: 700;
   }
 
+  // &ExpendedLogo {
+  //   width: 100%;
+  //   height: 80px;
+  //   background-color: map-get($colors, primary-light);
+  //   display: block;
+  //   align-items: center;
+  //   justify-content: center;
+  //   color: map-get($colors, bg-white);
+  // }
+
   &Title {
     font-weight: 700;
     font-size: 0.875rem;

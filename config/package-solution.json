@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "e-procurement-client-side-solution",
+    "name": "e-procurement",
     "id": "21cbf2d2-75b1-467e-baa1-a4da8285f20f",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
@@ -23,7 +23,9 @@
       },
       "screenshotPaths": [],
       "videoUrl": "",
-      "categories": []
+      "categories": [],
+      "appearance": "FullPage",
+      "solutionType": "SharePointFullPage"
     },
     "features": [
       {

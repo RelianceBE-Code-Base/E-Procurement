@@ -230,13 +230,14 @@ body {
  
   .mockup-content {
     background: rgba(255, 255, 255, 0.9);
-    height: 300px;
+    height: 500px;
     border-radius: 0 0 10px 10px;
     padding: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     gap: 0;
+    width: 100%;
   }
   .mockup-content img {
     max-height: 100%;
@@ -244,6 +245,7 @@ body {
     object-fit: contain;
     display: block;
     margin: 0 auto;
+    width: 100%;
   }
   
   .mockup-bar {

@@ -31,7 +31,7 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
     const [successMessage, setSuccessMessage] = React.useState('');
 
     const filteredItems = approvalItems.filter(item => {
-        if (activeTab === 'pending') return item.status === 'pending';
+        if (activeTab === 'pending') return item.status === 'pending' || 'pending Approval';
         return true;
     });
 
@@ -40,7 +40,26 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
             return (
                 <div className="flex gap-2">
                     <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                        pending Executive
+                        Pending Executive
+                    </span>
+                    {priority === 'high' && (
+                        <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-bold">
+                            HIGH
+                        </span>
+                    )}
+                    {priority === 'medium' && (
+                        <span className="px-3 py-1 bg-orange-500 text-white rounded-full text-sm font-bold">
+                            MEDIUM
+                        </span>
+                    )}
+                </div>
+            );
+        }
+        if (status === 'pending Approval') {
+            return (
+                <div className="flex gap-2">
+                    <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                        Pending Payment
                     </span>
                     {priority === 'high' && (
                         <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-bold">
@@ -147,7 +166,7 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
                             : 'border-transparent text-gray-500 hover:text-gray-700'
                             }`}
                     >
-                        pending Approvals
+                        Pending Approvals
                     </button>
                     <button
                         onClick={() => setActiveTab('all')}

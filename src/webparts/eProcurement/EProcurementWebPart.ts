@@ -103,7 +103,7 @@ export default class EProcurementWebPart extends BaseClientSideWebPart<IEProcure
       });
     });
 
-    document.querySelector<HTMLElement>('#spCommandBar')?.style.setProperty('min-height', '0', 'important');
+    //document.querySelector<HTMLElement>('#spCommandBar')?.style.setProperty('min-height', '0', 'important');
     
 
 

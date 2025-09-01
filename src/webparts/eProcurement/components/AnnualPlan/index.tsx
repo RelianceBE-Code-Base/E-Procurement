@@ -36,11 +36,11 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
         {/* Recent Requests Table */}
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Annaul Plan Requests</h3>
+            <h3 className="text-lg font-semibold">Annaul Procurement Plans</h3>
             <div className="flex gap-2">
               <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2" onClick={openNewAnnualPlan}>
                 <Plus className="w-4 h-4" />
-                New Request
+                New Procurement Plan
               </button>
               <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2">
                 <Filter className="w-4 h-4" />
@@ -53,11 +53,12 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
               <thead>
                 <tr className="border-b">
                   <th className="text-left py-3 px-4">Request ID</th>
-                  <th className="text-left py-3 px-4">Title</th>
-                  <th className="text-left py-3 px-4">Department</th>
-                  <th className="text-left py-3 px-4">Current Stage</th>
-                  <th className="text-left py-3 px-4">Priority</th>
-                  <th className="text-left py-3 px-4">Amount</th>
+                  <th className="text-left py-3 px-4">Procurement Title</th>
+                  <th className="text-left py-3 px-4">Procurement Method</th>
+                  <th className="text-left py-3 px-4">Procurement Year</th>
+                  <th className="text-left py-3 px-4">Status</th>
+                  <th className="text-left py-3 px-4">Planned Date</th>
+                  <th className="text-left py-3 px-4">Estimated Cost</th>
                   <th className="text-left py-3 px-4">Actions</th>
                 </tr>
               </thead>
@@ -66,7 +67,8 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
                   <tr key={request.id} className="border-b hover:bg-gray-50">
                     <td className="py-3 px-4 font-mono text-sm">{request.id}</td>
                     <td className="py-3 px-4">{request.title}</td>
-                    <td className="py-3 px-4">{request.department}</td>
+                    <td className="py-3 px-4">{request.procurementMethod}</td>
+                    <td className="py-3 px-4">{request.ProcurementYear}</td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${request.status === 'Completed' ? 'bg-green-100 text-green-800' :
                           request.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
@@ -76,12 +78,9 @@ const AnnualPlan: React.FC<IAnnualPlan> = ({ activeTab, sampleRequests }) => {
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded text-xs ${request.priority === 'High' ? 'bg-red-100 text-red-800' :
-                          request.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-gray-100 text-gray-800'
-                        }`}>
-                        {request.priority}
-                      </span>
+                     
+                        {request.date}
+
                     </td>
                     <td className="py-3 px-4 font-semibold">{request.amount}</td>
                     <td className="py-3 px-4">

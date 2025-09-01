@@ -1,23 +1,68 @@
 {
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "Hosted workbench",
-      "type": "msedge",
-      "request": "launch",
-      "url": "https://{tenantDomain}/_layouts/workbench.aspx",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.././src/*": "${webRoot}/src/*",
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      {
+        "name": "Hosted workbench",
+        "type": "msedge",
+        "request": "launch",
+        "url": "https://relianceqat.sharepoint.com/sites/SPFxDevelopment/_layouts/15/workbench.aspx",
+        "webRoot": "${workspaceRoot}",
+        "sourceMaps": true,
+        "sourceMapPathOverrides": {
+          "webpack:///.././src/*": "${webRoot}/src/*",
+          "webpack:///../../../src/*": "${webRoot}/src/*",
+          "webpack:///../../../../src/*": "${webRoot}/src/*",
+          "webpack:///../../../../../src/*": "${webRoot}/src/*"
+        }
       },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222",
-        "-incognito"
-      ]
-    }
+      {
+          "name": "SPFx Local",
+          "type": "msedge",
+          "request": "launch",
+          "url": "https://localhost:4321/temp/workbench.html",
+          "webRoot": "${workspaceRoot}",
+          "sourceMaps": true,
+          "sourceMapPathOverrides": {
+              "webpack:///../../../src/*": "${webRoot}/src/*",
+              "webpack:///../../../../src/*": "${webRoot}/src/*",
+              "webpack:///../../../../../src/*": "${webRoot}/src/*"
+          },
+          "runtimeArgs": [
+              "--remote-debugging-port=9222"
+          ]
+      },
+      
+      {
+          "name": "SPFx Online",
+          "type": "msedge",
+          "request": "launch",
+          "url": "https://relianceqat.sharepoint.com/sites/SPFxDevelopment/SitePages/<your_webpart_page>.aspx",
+          "webRoot": "${workspaceRoot}",
+          "sourceMaps": true,
+          "sourceMapPathOverrides": {
+              "webpack:///../../../src/*": "${webRoot}/src/*",
+              "webpack:///../../../../src/*": "${webRoot}/src/*",
+              "webpack:///../../../../../src/*": "${webRoot}/src/*"
+          },
+          "runtimeArgs": [
+              "--remote-debugging-port=9222"
+          ]
+      },
+      {
+          "name": "SPFx Online Workbench",
+          "type": "msedge",
+          "request": "launch",
+          "url": "https://relianceqat.sharepoint.com/_layouts/workbench.aspx",
+          "webRoot": "${workspaceRoot}",
+          "sourceMaps": true,
+          "sourceMapPathOverrides": {
+              "webpack:///../../../src/*": "${webRoot}/src/*",
+              "webpack:///../../../../src/*": "${webRoot}/src/*",
+              "webpack:///../../../../../src/*": "${webRoot}/src/*"
+          },
+          "runtimeArgs": [
+              "--remote-debugging-port=9222"
+          ]
+      }
   ]
 }

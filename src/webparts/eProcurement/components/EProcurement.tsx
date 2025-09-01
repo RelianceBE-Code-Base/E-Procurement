@@ -7,16 +7,29 @@ import "./eprocurementlanding.css";
 import land from "../assets/procure.jpg";
 import coat from "../assets/Group5.png";
 import firslogo from "../assets/FIRS-logo.png";
+import { useState } from 'react';
 
 const EProcurement: React.FC<IEProcurementProps> = (props) => {
   //const { description, isDarkTheme, environmentMessage, userDisplayName } = props;
+  const [selectedRole, setSelectedRole] = useState('')
 
 
     const navigate = useNavigate();
 
-    const navigateToMain=()=>{
-      navigate('/home')
-    }
+    const navigateToMain = (user: string) => {
+
+
+      const username = props.userDisplayName
+      const initial = username.trim().split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
+
+      let userLogin = {
+        fullName: username,
+        initials: initial,
+        role: selectedRole
+      };
+    
+      navigate('/home', { state: { userLogin } });
+    };
 
     return (
       <section>
@@ -84,20 +97,45 @@ const EProcurement: React.FC<IEProcurementProps> = (props) => {
                 government tax collection agencies. Ensure compliance,
                 transparency, and efficiency in every purchase.
               </p>
-              <button className="cta-button p-2 hover:bg-gray-100 rounded-lg" onClick={navigateToMain}>
-                Get Started
-              </button>
+              <div className="flex justify-center">
+  <div className="flex flex-col items-center space-y-4 w-full max-w-sm">
+    <select
+      className="w-full px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+      value={selectedRole}
+      onChange={(e) => setSelectedRole(e.target.value)}
+    >
+      <option value="">Select a role</option>
+      <option value="User Department">User Department</option>
+      <option value="Head of Department">Head of Department</option>
+      <option value="Procurement Officer">Procurement Officer</option>
+      <option value="Director of Procurement">Director of Procurement</option>
+      <option value="Executive Chairman">Executive Chairman</option>
+      <option value="BPP Member">Bureau of Public Procurement Member</option>
+      <option value="FEC Member">Federal Executive Council Member</option>
+      <option value="Administrator">Administrator</option>
+    </select>
+
+    <button
+      className="cta-button w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+      onClick={() => navigateToMain(selectedRole)}
+      disabled={!selectedRole}
+    >
+      Get Started
+    </button>
+  </div>
+</div>
+
             </div>
             <div className="hero-visual">
               <div className="dashboard-mockup">
                 <div className="mockup-header">
-                  <div className="mockup-dots">
+                  <div className="mockup-dots" style={{paddingBottom:'5px'}}>
                     <div className="dot red"></div>
                     <div className="dot yellow"></div>
                     <div className="dot green"></div>
                   </div>
                 </div>
-                <div className="mockup-content">
+                <div className="mockup-content" style={{paddingTop: '10px'}}>
                   <img src={land} alt="Dashboard preview"/>
                 </div>
               </div>

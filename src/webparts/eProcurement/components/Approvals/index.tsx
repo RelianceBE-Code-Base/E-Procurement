@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { CheckCircle, XCircle, Calendar, Eye } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 interface IApprovalItem {
     id: string;
@@ -9,11 +10,13 @@ interface IApprovalItem {
     department: string;
     date: string;
     amount: string;
-    status: 'pending' | 'approved' | 'rejected' | 'completed';
+    status: 'Pending' | 'Approved' | 'Rejected' | 'Completed' | 'Pending Approval' | 'In Progress';
     category: string;
     priority: 'low' | 'medium' | 'high';
     neededBy: string;
     quantity: number;
+    currentApprover: string;
+    stage: string;
 }
 
 interface IApprovals {
@@ -30,24 +33,56 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
     const [showSuccessModal, setShowSuccessModal] = React.useState(false);
     const [successMessage, setSuccessMessage] = React.useState('');
 
-    const filteredItems = approvalItems.filter(item => {
-        if (activeTab === 'pending') return item.status === 'pending' || 'pending Approval';
+    const location = useLocation();
+
+    const currentLoginUser = location.state?.userLogin;
+
+    let approvalData =[]
+
+    if(currentLoginUser.role === 'Executive Chairman'){
+        approvalData = approvalItems.filter(itm => {
+            return itm.currentApprover === 'Executive Chairman'
+        })
+    }else if(currentLoginUser.role === 'FEC Member'){
+        approvalData = approvalItems.filter(itm => {
+            return itm.currentApprover === 'Federal Executive Council'
+        }) 
+    }else if(currentLoginUser.role === 'BPP Member'){
+        approvalData = approvalItems.filter(itm => {
+            return itm.currentApprover === 'Bureau of Public Procurement'
+        }) 
+    }else if(currentLoginUser.role === 'Director of Procurement'){
+        approvalData = approvalItems.filter(itm => {
+            return itm.currentApprover === 'Director of Procurement'
+        }) 
+    }else{
+        approvalData = approvalItems.filter(itm => {
+            return itm.currentApprover === 'Head of Department'
+        }) 
+    }
+    
+
+    const filteredItems = approvalData.filter(item => {
+        if (activeTab === 'pending') {
+            return item.status === 'Pending';
+        }
         return true;
     });
 
-    const getStatusBadge = (status: string, priority: string) => {
-        if (status === 'pending') {
+
+    const getStatusBadge = (status: string, priority: string, stage: string) => {
+        if (status === 'Pending') {
             return (
                 <div className="flex gap-2">
                     <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                        Pending Executive
+                        {stage}
                     </span>
-                    {priority === 'high' && (
+                    {priority === 'High' && (
                         <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-bold">
                             HIGH
                         </span>
                     )}
-                    {priority === 'medium' && (
+                    {priority === 'Medium' && (
                         <span className="px-3 py-1 bg-orange-500 text-white rounded-full text-sm font-bold">
                             MEDIUM
                         </span>
@@ -55,33 +90,30 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
                 </div>
             );
         }
-        if (status === 'pending Approval') {
+
+        if (status === 'Approved') {
             return (
                 <div className="flex gap-2">
-                    <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
-                        Pending Payment
+                    <span className="px-3 py-1 bg-green-600 text-white rounded-full text-sm font-medium">
+                        Completed
                     </span>
-                    {priority === 'high' && (
-                        <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-bold">
-                            HIGH
-                        </span>
-                    )}
-                    {priority === 'medium' && (
-                        <span className="px-3 py-1 bg-orange-500 text-white rounded-full text-sm font-bold">
+                    {priority === 'Medium' && (
+                        <span className="px-3 py-1 bg-orange-600 text-white rounded-full text-sm font-bold">
                             MEDIUM
                         </span>
                     )}
                 </div>
             );
         }
-        if (status === 'approved') {
+
+        if (status === 'Rejected') {
             return (
                 <div className="flex gap-2">
-                    <span className="px-3 py-1 bg-purple-500 text-white rounded-full text-sm font-medium">
-                        Assigned
+                    <span className="px-3 py-1 bg-red-600 text-white rounded-full text-sm font-medium">
+                        Not Completed
                     </span>
-                    {priority === 'medium' && (
-                        <span className="px-3 py-1 bg-orange-500 text-white rounded-full text-sm font-bold">
+                    {priority === 'Medium' && (
+                        <span className="px-3 py-1 bg-orange-600 text-white rounded-full text-sm font-bold">
                             MEDIUM
                         </span>
                     )}
@@ -114,7 +146,7 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
         if (selectedItem) {
             setApprovalItems(items =>
                 items.map(item =>
-                    item.id === selectedItem.id ? { ...item, status: 'approved' as const } : item
+                    item.id === selectedItem.id ? { ...item, status: 'Approved' as const } : item
                 )
             );
             setShowApproveModal(false);
@@ -127,7 +159,7 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
         if (selectedItem) {
             setApprovalItems(items =>
                 items.map(item =>
-                    item.id === selectedItem.id ? { ...item, status: 'rejected' as const } : item
+                    item.id === selectedItem.id ? { ...item, status: 'Rejected' as const } : item
                 )
             );
             setShowRejectModal(false);
@@ -189,7 +221,7 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-3">
                                         <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
-                                        {getStatusBadge(item.status, item.priority)}
+                                        {getStatusBadge(item.status, item.priority, item.stage)}
                                     </div>
 
                                     <p className="text-gray-600 mb-4">{item.description}</p>
@@ -239,7 +271,7 @@ const ProcurementApprovals: React.FC<IApprovals> = ({ sampleRequests }) => {
                                             View Details
                                         </button>
 
-                                        {item.status === 'pending' && (
+                                        {item.status === 'Pending' &&(
                                             <>
                                                 <button
                                                     onClick={() => handleApprove(item)}

@@ -31,6 +31,16 @@ const procurementOfficers = [
   { id: 4, name: "Emily Davis", department: "Procurement", email: "emily.davis@company.com" }
 ];
 
+const memo = `Title: Request for Procurement of Office Furniture
+Memo ID: MEMO/2025/042
+Date: July 11, 2025
+Prepared By: Aja Ifeanyi – Procurement Officer
+Department: Procurement Unit
+
+This memo seeks management’s approval for the procurement of essential office furniture for the newly created Innovation Unit. The furniture required includes workstations, ergonomic chairs, storage cabinets, and a conference table to support the team’s operations.
+
+The request is based on the needs assessment carried out on June 30, 2025. The estimated total cost is ₦3,500,000, and the procurement will follow the restricted bidding method as outlined in the approved Annual Procurement Plan.`
+
 
 const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initialRequests, approvalThresholds = DEFAULT_THRESHOLDS }) => {
   const [showCompletionBox, setShowCompletionBox] = useState(false);
@@ -62,7 +72,7 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
   const [showFecModal, setShowFecModal] = useState(false);
 
   // Memo state
-  const [memoContent, setMemoContent] = useState('');
+  const [memoContent, setMemoContent] = useState(memo);
   const [recommendation, setRecommendation] = useState('');
   const [reviewComments, setReviewComments] = useState('');
 
@@ -639,7 +649,7 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
             {/* Status Information */}
             <div className="flex justify-between">
               <div className="w-1/2 pr-2">
-                <p className="text-gray-500 text-sm">Current Stage:</p>
+                <p className="text-gray-500 text-sm">Status:</p>
                 <p className="text-gray-900">{viewingRequest.stage}</p>
               </div>
               <div className="w-1/2 pl-2">
@@ -754,7 +764,16 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
       currentApprovalAuthority: nextAuthority
     });
 
-    setMessage(`Memo has been forwarded to ${nextAuthority} via Coordination Director`);
+    setMessage(`
+      Memo has been forwarded to <b>${nextAuthority}</b> via the Coordination Director.
+      <br/><br/>
+      <b>Approval Threshold Guide:</b><br/>
+      • If the total cost is <b>less than ₦10,000,000</b>, final approval rests with the <b>Executive Chairman</b>.<br/>
+      • If the total cost is <b>between ₦10,000,000 and ₦14,999,999</b>, approval is required from the <b>Tenders Board</b>.<br/>
+      • If the cost is <b>between ₦15,000,000 and ₦49,999,999</b>, approval is escalated to the <b>Bureau of Public Procurement (BPP)</b>.<br/>
+      • If the cost is <b>₦50,000,000 or above</b>, approval must be granted by the <b>Federal Executive Council (FEC)</b>.
+    `);
+    
     setShowCompletionBox(true);
     setShowForwardMemoModal(false);
   };
@@ -898,14 +917,17 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
               </label>
               <select
                 value={recommendation}
-                onChange={(e) => setRecommendation(e.target.value)}
+                onChange={(e) => setRecommendation(e.target.options[e.target.selectedIndex].text)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select recommendation</option>
-                <option value="Approve">Approve</option>
-                <option value="Approve with Conditions">Approve with Conditions</option>
-                <option value="Reject">Reject</option>
-                <option value="Request Further Evaluation">Request Further Evaluation</option>
+                <option value="Approve">Approve – Procurement aligns with the approved budget and plan</option>
+                <option value="Approve with Conditions">Approve with Conditions – Subject to budget revalidation or availability</option>
+                <option value="Defer">Defer – Postpone due to funding constraints or prioritization</option>
+                <option value="Reject">Reject – Does not meet current operational needs or policy</option>
+                <option value="Request Clarification">Request Clarification – More details needed on scope or cost</option>
+                <option value="Escalate to Management">Escalate to Management – Requires higher-level approval or input</option>
+
               </select>
             </div>
           </div>
@@ -952,7 +974,11 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
 
             <div className="bg-blue-50 p-4 rounded-lg">
               <h4 className="font-medium text-blue-800 mb-2">Memo Details:</h4>
-              <p className="text-sm text-blue-700">{selectedRequest.memoContent}</p>
+              <div
+                className="text-sm text-blue-700 whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: selectedRequest.memoContent }}
+              />
+              {/* <p className="text-sm text-blue-700">{selectedRequest.memoContent}</p> */}
               <p className="text-sm font-medium text-blue-800 mt-2">
                 Recommendation: {selectedRequest.recommendation}
               </p>
@@ -1165,8 +1191,8 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
                   <th className="text-left py-3 px-4">Request ID</th>
                   <th className="text-left py-3 px-4">Title</th>
                   <th className="text-left py-3 px-4">Department</th>
-                  <th className="text-left py-3 px-4">Current Stage</th>
-                  <th className="text-left py-3 px-4">Priority</th>
+                  <th className="text-left py-3 px-4">Procurement Method</th>
+                  <th className="text-left py-3 px-4">Status</th>
                   <th className="text-left py-3 px-4">Amount</th>
                   <th className="text-left py-3 px-4">Actions</th>
                 </tr>
@@ -1178,19 +1204,16 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
                     <td className="py-3 px-4">{request.title}</td>
                     <td className="py-3 px-4">{request.department}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${request.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                        request.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>
-                        {request.stage}
-                      </span>
+                      
+                        {request.procurementMethod}
+                     
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded text-xs ${request.priority === 'High' ? 'bg-red-100 text-red-800' :
-                        request.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
+                    <span className={`px-2 py-1 rounded-full text-xs ${request.status === 'Completed' ? 'bg-green-100 text-green-800' :
+                          request.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                            'bg-yellow-100 text-yellow-800'
                         }`}>
-                        {request.priority}
+                        {request.stage}
                       </span>
                     </td>
                     <td className="py-3 px-4 font-semibold">{request.amount}</td>
@@ -1203,6 +1226,7 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
                           <Eye className="w-4 h-4" />
                         </button>
                         <ActionDropdown request={request} />
+                        
                       </div>
                     </td>
                   </tr>
@@ -1238,7 +1262,11 @@ const TenderManagement: React.FC<ITenderManagement> = ({ sampleRequests: initial
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-gray-600 mb-4">{message}</p>
+            <div
+            className="text-gray-600 mb-4 whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: message }}
+          />
+            {/* <p className="text-gray-600 mb-4">{message}</p> */}
             <div className="flex justify-end">
               <button
                 onClick={() => setShowCompletionBox(false)}

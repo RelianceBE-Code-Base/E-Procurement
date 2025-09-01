@@ -22,9 +22,9 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
     handleReset()
     setReferenceNumber("REQ-2025-005")
     SetDescription(`•	The Director of Procurement:<br />
-              Reviews the memo, <br />
+              Reviews the memo and
               Validates the request against the approved annual procurement plan`)
-    SetMessage("A memo has been generated, addressed to the Executive Chairman (EC) seeking approval to initiate procurement for the stated need.")
+    SetMessage("A memo has been generated and submitted to the Head of Department for preliminary review. Following departmental endorsement, it will be forwarded to the Executive Chairman (EC) of FIRS for final approval to initiate the procurement process in line with the stated requirement and applicable public procurement guidelines.")
     setIsSubmitting(false)
     setIsSubmitted(true)
   }
@@ -97,7 +97,7 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
                       <th className="text-left py-3 px-4">Request ID</th>
                       <th className="text-left py-3 px-4">Title</th>
                       <th className="text-left py-3 px-4">Department</th>
-                      <th className="text-left py-3 px-4">Current Stage</th>
+                      <th className="text-left py-3 px-4">Status</th>
                       <th className="text-left py-3 px-4">Priority</th>
                       <th className="text-left py-3 px-4">Amount</th>
                     </tr>

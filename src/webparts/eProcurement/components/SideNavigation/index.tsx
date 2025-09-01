@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { Settings, HelpCircle, LogOut } from 'lucide-react';
 import styles from '../EProcurement.module.scss';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
 
 interface INavItem {
   id: string;
   name: string;
   icon: React.ComponentType<{ className?: string }>;
   active?: boolean;
+  roles:string[];
 }
 
 interface ISideNav {
@@ -31,6 +33,26 @@ const SideNav: React.FC<ISideNav> = ({
   const navigateHome = () => {
     navigate('/')
   }
+  const [visibleNavItems, setVisibleNavItems] = useState<INavItem[]>([]);
+  
+  const location = useLocation();
+
+  const currentLoginUser = location.state?.userLogin;
+
+  if (!currentLoginUser) {
+    navigateHome()
+    return null;
+  }
+
+  useEffect(() => {
+    if (currentLoginUser?.role) {
+      const filtered = sidenavItems.filter(item =>
+        item.roles.includes(currentLoginUser.role)
+      );
+      setVisibleNavItems(filtered);
+    }
+  }, [currentLoginUser]);
+  
   return (
     <div className={`${styles.sideNavContainer} ${sidenavOpen ? styles.open : styles.closed}`}>
       <div className={styles.sideNavHeader}>
@@ -46,7 +68,7 @@ const SideNav: React.FC<ISideNav> = ({
       </div>
 
       <nav className={styles.sideNavNav}>
-        {sidenavItems.map((item) => (
+        {visibleNavItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveTab(item.id)}
@@ -61,10 +83,12 @@ const SideNav: React.FC<ISideNav> = ({
       <div className={styles.sideNavFooter}>
         {sidenavOpen && (
           <div className={styles.sideNavFooterItems}>
+            {currentLoginUser?.role === 'Administrator' &&
             <button className={styles.sideNavFooterItem}>
               <Settings className={styles.sideNavFooterIcon} />
               Settings
             </button>
+            }
             <button className={styles.sideNavFooterItem}>
               <HelpCircle className={styles.sideNavFooterIcon} />
               Help

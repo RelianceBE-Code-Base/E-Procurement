@@ -5,10 +5,10 @@ import { Search, Bell, Menu, X } from "lucide-react";
 import styles from "../EProcurement.module.scss";
 import coat from "../../assets/Group5.png";
 import firslogo from "../../assets/FIRS-logo.png";
+import { useLocation } from "react-router-dom";
  
 interface ITopNavigation {
   sidenavOpen: boolean;
- 
   setSidenavOpen: (open: boolean) => void;
 }
  
@@ -16,6 +16,10 @@ const TopNavigation: React.FC<ITopNavigation> = ({
   sidenavOpen,
   setSidenavOpen,
 }) => {
+  const location = useLocation();
+
+  const loginUser = location.state?.userLogin;
+
   return (
     <header
       className={`${styles.topNavHeader} bg-white shadow-sm border-b w-full`}
@@ -82,10 +86,10 @@ const TopNavigation: React.FC<ITopNavigation> = ({
               style={{ gap: "0.75rem" }}
             >
               <div style={{ textAlign: "right" }}>
-                <p className={styles.topNavUserName}>John Doe</p>
-                <p className={styles.topNavUserRole}>Procurement Officer</p>
+                <p className={styles.topNavUserName}>{loginUser?.fullName}</p>
+                <p className={styles.topNavUserRole}>{loginUser?.role}</p>
               </div>
-              <div className={styles.topNavUserInitials}>JD</div>
+              <div className={styles.topNavUserInitials}>{loginUser?.initials}</div>
             </div>
           </div>
         </div>

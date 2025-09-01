@@ -96,7 +96,7 @@ return(
               <th className="text-left py-3 px-4">Request ID</th>
               <th className="text-left py-3 px-4">Title</th>
               <th className="text-left py-3 px-4">Department</th>
-              <th className="text-left py-3 px-4">Current Stage</th>
+              <th className="text-left py-3 px-4">Status</th>
               <th className="text-left py-3 px-4">Priority</th>
               <th className="text-left py-3 px-4">Amount</th>
               <th className="text-left py-3 px-4">Actions</th>

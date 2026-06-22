@@ -34,7 +34,13 @@
         "id": "bb46a660-d48f-4750-87b1-069546eb5663",
         "version": "1.0.0.0"
       }
-    ]
+    ],
+     "webApiPermissionRequests": [
+    {
+      "resource": "OpenRouter",
+      "scope": "user_impersonation"
+    }
+  ]
   },
   "paths": {
     "zippedPackage": "solution/e-procurement.sppkg"

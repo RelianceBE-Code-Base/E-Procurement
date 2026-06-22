@@ -6,7 +6,7 @@ import {  useNavigate } from 'react-router-dom';
 import "./eprocurementlanding.css";
 import land from "../assets/procure.jpg";
 import coat from "../assets/Group5.png";
-import firslogo from "../assets/FIRS-logo.png";
+import firslogo from "../assets/NRS_Logo.jpg";
 import { useState } from 'react';
 
 const EProcurement: React.FC<IEProcurementProps> = (props) => {
@@ -62,7 +62,7 @@ const EProcurement: React.FC<IEProcurementProps> = (props) => {
               }}
             >
               <h1 className='nav-title'>
-                Federal Inland Revenue Service
+                Nigeria Revenue Service
               </h1>
               <p className='nav-Subtitle'>
                 Procurement Management System

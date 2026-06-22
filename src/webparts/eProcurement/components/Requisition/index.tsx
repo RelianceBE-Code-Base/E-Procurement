@@ -24,7 +24,7 @@ const Requistion: React.FC<IRequistion> = ({ sampleRequests }) => {
     SetDescription(`•	The Director of Procurement:<br />
               Reviews the memo and
               Validates the request against the approved annual procurement plan`)
-    SetMessage("A memo has been generated and submitted to the Head of Department for preliminary review. Following departmental endorsement, it will be forwarded to the Executive Chairman (EC) of FIRS for final approval to initiate the procurement process in line with the stated requirement and applicable public procurement guidelines.")
+    SetMessage("A memo has been generated and submitted to the Head of Department for preliminary review. Following departmental endorsement, it will be forwarded to the Executive Chairman (EC) of NRS for final approval to initiate the procurement process in line with the stated requirement and applicable public procurement guidelines.")
     setIsSubmitting(false)
     setIsSubmitted(true)
   }

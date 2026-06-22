@@ -10,7 +10,6 @@ const AI_CONFIG = {
 =======
   // OPENROUTER_API_KEY: "YOUR_OPENROUTER_API_KEY", // You can get your OpenRouter API key from https://openrouter.ai
 
-  //example REDACTED_API_KEY
   OPENROUTER_API_KEY: "",
 >>>>>>> 89cfc5c (chore: Update AI configuration to comment out API key and provide usage instructions)
 

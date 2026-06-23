@@ -54,7 +54,7 @@ body {
 }
  
 .logo::before {
-  content: url(../assets/FIRS-logo.png);
+  content: url(../assets/NRS_Logo.jpg);
   font-size: 10px;
   display: block; /* Essential for applying width/height */
   width: 20px; /* Set desired width */

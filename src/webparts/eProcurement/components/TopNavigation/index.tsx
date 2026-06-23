@@ -4,7 +4,7 @@ import { Search, Bell, Menu, X } from "lucide-react";
  
 import styles from "../EProcurement.module.scss";
 import coat from "../../assets/Group5.png";
-import firslogo from "../../assets/FIRS-logo.png";
+import firslogo from "../../assets/NRS_Logo.jpg";
 import { useLocation } from "react-router-dom";
  
 interface ITopNavigation {
@@ -57,7 +57,7 @@ const TopNavigation: React.FC<ITopNavigation> = ({
               />
               <div style={{ paddingLeft: "50px" }}>
                 <h1 className={styles.topNavTitle}>
-                  Federal Inland Revenue Service
+                  Nigeria Revenue Service
                 </h1>
                 <p className={styles.topNavSubtitle}>
                   Procurement Management System

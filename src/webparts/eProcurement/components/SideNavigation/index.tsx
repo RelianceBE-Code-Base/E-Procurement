@@ -33,6 +33,8 @@ const SideNav: React.FC<ISideNav> = ({
   const navigateHome = () => {
     navigate('/')
   }
+
+  
   const [visibleNavItems, setVisibleNavItems] = useState<INavItem[]>([]);
   
   const location = useLocation();
@@ -60,7 +62,7 @@ const SideNav: React.FC<ISideNav> = ({
           <div className={styles.sideNavLogo}>F</div>
           {sidenavOpen && (
             <div>
-              <h2 className={styles.sideNavTitle}>FIRS</h2>
+              <h2 className={styles.sideNavTitle}>NRS</h2>
               <p className={styles.sideNavSubtitle}>E-Procurement System</p>
             </div>
           )}
@@ -101,6 +103,7 @@ const SideNav: React.FC<ISideNav> = ({
         )}
       </div>
     </div>
+
   );
 };
 

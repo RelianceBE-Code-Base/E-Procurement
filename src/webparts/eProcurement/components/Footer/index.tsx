@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
     <footer className={`${styles.footerContainer} bg-white border-t px-6 py-4 w-full`}>
       <div className={styles.footerContent}>
         <div className={styles.footerLeftSection}>
-          <p>© 2025 Federal Inland Revenue Service</p>
+          <p>© {new Date().getFullYear()} Nigeria Revenue Service</p>
           <span className={styles.footerDivider}>•</span>
           <p>Procurement Management System v2.1</p>
           <span className={styles.footerDivider}>•</span>

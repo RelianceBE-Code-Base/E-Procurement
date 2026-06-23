@@ -29,7 +29,7 @@ import { Download, Eye, Filter, Plus } from 'lucide-react';
 //     "Low": IColumnItemStageStyle;
 // }
 
-interface IDetailsListItem {
+export interface IDetailsListItem {
     id: number;
     requestId: string;
     title: string;
@@ -70,47 +70,14 @@ interface IDetailsListItem {
 //     }
 // };
 
-const dummyDetailsListItems: IDetailsListItem[] = [
-    {
-        id: 1,
-        requestId: "REQ-2025-001",
-        title: "Office Furniture Procurement",
-        department: "Admin",
-        currentStage: "Tender Evaluation",
-        priority: "Medium",
-        amount: "₦2,500,000"
-    },
-    {
-        id: 2,
-        requestId: "REQ-2025-002",
-        title: "IT Equipment Upgrade",
-        department: "ICT",
-        currentStage: "EC Review",
-        priority: "High",
-        amount: "₦15,000,000"
-    },
-    {
-        id: 3,
-        requestId: "REQ-2025-003",
-        title: "Vehicle Maintenance Services",
-        department: "Transport",
-        currentStage: "Payment Processing",
-        priority: "Low",
-        amount: "₦800,000"
-    },
-    {
-        id: 4,
-        requestId: "REQ-2025-004",
-        title: "Office Printing Supplies",
-        department: "Admin",
-        currentStage: "EC Review",
-        priority: "Medium",
-        amount: "₦800,000"
-    }
-];
 
 
-const DepartmentalNeeds: React.FunctionComponent<{}> = () => {
+interface IDepartmentalNeeds {
+    sampleDepartmentalNeeds: IDetailsListItem[]; // Optional initial requests data, can be fetched from an API or passed as props
+}
+
+
+const DepartmentalNeeds: React.FunctionComponent<IDepartmentalNeeds> = ({ sampleDepartmentalNeeds }) => {
     const [isDepartmentRequestDialogOpen, { setTrue: openDepartmentRequestDialog, setFalse: dismissDepartmentRequestDialog }] = useBoolean(false);
 
 
@@ -281,7 +248,7 @@ const DepartmentalNeeds: React.FunctionComponent<{}> = () => {
       </tr>
     </thead>
     <tbody>
-      {dummyDetailsListItems.map((request:any) => (
+      {sampleDepartmentalNeeds.map((request:any) => (
         <tr key={request.requestId} className="border-b hover:bg-gray-50">
           <td className="py-3 px-4 font-mono text-sm">{request.requestId}</td>
           <td className="py-3 px-4">{request.title}</td>

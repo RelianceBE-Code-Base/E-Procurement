@@ -2,7 +2,7 @@
   "extends": "./node_modules/@microsoft/rush-stack-compiler-5.3/includes/tsconfig-web.json",
   "compilerOptions": {
     //"target": "es5",
-    "target": "ES2016",
+    "target": "ES2017",
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -23,15 +23,14 @@
       "webpack-env"
     ],
     "lib": [
-      "ES2016", "DOM",
-      "es5",
-      "dom",
-      "es2015.collection",
-      "es2015.promise"
+      "ES2017",
+      "DOM"
     ]
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "src/webparts/eProcurement/components/NRSAI/index.tsx"
   ]
 }
